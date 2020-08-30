@@ -1,0 +1,4 @@
+GO4_PDM_2020.c:82:6:Log_CAN_Messages	8	static
+GO4_PDM_2020.c:88:6:PDM_Init	16	static
+GO4_PDM_2020.c:110:6:Current_Control_Loop	32	static
+GO4_PDM_2020.c:179:6:HAL_ADC_ConvCpltCallback	24	static
