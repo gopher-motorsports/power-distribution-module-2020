@@ -56,56 +56,95 @@ extern TIM_HandleTypeDef htim17;
  */
 
 static U8 restart_adc_flag;
-static U32 last_adc_interrupt_delta;
-static U32 this_adc_interrupt_delta;
+static U32 avg_adc_interrupt_delta;
+static U32 adc_interrupt_cnt;
+static U64 adc_delta_sum;
 
+// a current draw above this defines an overcurrent event
 static U16 channel_zero_max_setpoint = 3500;
-static U16 channel_one_max_setpoint = 3500;
+static U16 channel_one_max_setpoint  = 3500;
 static U16 channel_four_max_setpoint = 3500;
 
+
 // Channel Information
-static U16                  current_buffer[NUM_ADC_CHANNELS];
-static U8                   adc_channels[]          = { ADC_CHANNEL_0, ADC_CHANNEL_1, ADC_CHANNEL_4 }; // Pay attention to ordering!!
-static ADC_CHANNEL_STATE    channel_states[]        = { NORMAL, NORMAL, NORMAL };
-static CURRENT_DATA_STATE   channel_data_states[]   = { USED, USED, USED };	// Dont want to use inital data in calculation
-static U16                  *channel_setpoints[]    = { &channel_zero_max_setpoint, &channel_one_max_setpoint, &channel_four_max_setpoint };
+//static U8                   adc_channels[]          = { ADC_CHANNEL_0, ADC_CHANNEL_1, ADC_CHANNEL_4 };
 static U8                   num_restart_attempts[]  = { 10, 10, 10 };
-static U16                  gpio_control_pins[]     = { GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 };
+static U16                  gpio_control_pins[]     = { GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 }; // Pay attention to ordering!!
+static U16                  *channel_setpoints[]    = { &channel_zero_max_setpoint, &channel_one_max_setpoint, &channel_four_max_setpoint };
+
+static U16                  current_buffer[NUM_ADC_CHANNELS];
+static U16                  current_overage_integrals[NUM_ADC_CHANNELS]; // units of milliamps * seconds
+static
 static U16                  restart_timeout_ref[NUM_ADC_CHANNELS];
+
+static ADC_CHANNEL_STATE    channel_states[]        = { NORMAL, NORMAL, NORMAL };
+//static CURRENT_DATA_STATE   channel_data_states[]   = { USED, USED, USED };	// Dont want to use inital data in calculation
+
 
 // Functions
 void Log_CAN_Messages(void) {
 
 }
 
+
+
 void PDM_Init(void) {
     U8 i;
 
     // Set timers to 0 (may not need to do this)
-    htim17.Instance->CNT = 0;
-    htim16.Instance->CNT = 0;
-    // Enable Channels after DMA starts
+    // Enable Channels
     for (i = 0; i < NUM_ADC_CHANNELS; i++) {
         HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[i],
                 GPIO_PIN_SET);
     }
     // Unsure about this auto calibration
     HAL_ADCEx_Calibration_Start(&hadc);		// start cal before starting adc
-    HAL_TIM_Base_Start(&htim16);// start timer so interrupt gives accurate time
-    HAL_TIM_Base_Start(&htim17);
-    HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS);
 
-    i++;
+    // start timers so interrupt gives accurate time
+    htim17.Instance->CNT = 0;
+    htim16.Instance->CNT = 0;
+    HAL_TIM_Base_Start(&htim16);
+    HAL_TIM_Base_Start(&htim17);
+
+    HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS); // start first round of conversions
 }
+
+
+
+void Schedule_ADC(void) {
+    U8  i;
+    U16 temp_current_buffer[NUM_ADC_CHANNELS];
+
+    while (1) {
+        if (restart_adc_flag) {
+            restart_adc_flag = 0;       // reset flag before DMA start so sw wont clear flag after interrupt
+
+            for (i = 0; i < NUM_ADC_CHANNELS; i++) {
+                // save current data so DMA doesnt overwrite it
+                temp_current_buffer[i] = current_buffer[i];
+            }
+
+            HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS);
+
+            // calculate average interrupt delta
+            adc_delta_sum += htim16.Instance->CNT;
+            adc_interrupt_cnt++;
+            avg_adc_interrupt_delta = adc_delta_sum / adc_interrupt_cnt;
+
+            htim16.Instance->CNT = 0;
+            HAL_TIM_Base_Start(&htim16);
+        }
+    }
+}
+
+
 
 void Current_Control_Loop(void) {
     U8 adc_channels_idx = 0;
-    U16 adc_val, time_ref, curr_time, time_diff;
+    U16 time_ref, curr_time, time_diff;
 
     // Infinite loop cycles through NUM_ADC_CHANNELS state machines, one for each channel
     while (1) {
-
-        adc_val = current_buffer[adc_channels_idx];
 
         switch (channel_states[adc_channels_idx]) {
             case PERMANENT_OFF:
@@ -123,20 +162,18 @@ void Current_Control_Loop(void) {
 
                 if (time_diff >= DEVICE_RESTART_TIMEOUT_MS) {
                     // turn the channel back on
-                    HAL_GPIO_WritePin(GPIO_CONTROL_PORT,
-                            gpio_control_pins[adc_channels_idx], GPIO_PIN_SET);
+                    HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[adc_channels_idx],
+                                                                                GPIO_PIN_SET);
                     channel_states[adc_channels_idx] = NORMAL;
                 }
                 break;
 
             case NORMAL:
-                if (channel_data_states[adc_channels_idx] == UNUSED) {
-                    if (adc_val >= *channel_setpoints[adc_channels_idx]) {
+                    if (current_overage_integrals[adc_channels_idx] >= *channel_setpoints[adc_channels_idx]) {
                         // Overcurrent event (level triggered)
                         // turn off control pin
-                        HAL_GPIO_WritePin(GPIO_CONTROL_PORT,
-                                gpio_control_pins[adc_channels_idx],
-                                GPIO_PIN_RESET);
+                        HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[adc_channels_idx],
+                                                                                  GPIO_PIN_RESET);
                         if (num_restart_attempts[adc_channels_idx] > 0) {
                             num_restart_attempts[adc_channels_idx]--;
                             restart_timeout_ref[adc_channels_idx] =
@@ -146,11 +183,6 @@ void Current_Control_Loop(void) {
                             channel_states[adc_channels_idx] = PERMANENT_OFF;
                         }
                     }
-
-                    channel_data_states[adc_channels_idx] = USED;
-                } else {
-                    HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer,
-                            NUM_ADC_CHANNELS);
                 }
                 break;
 
@@ -165,22 +197,14 @@ void Current_Control_Loop(void) {
         if (adc_channels_idx >= NUM_ADC_CHANNELS) {
             adc_channels_idx = 0;
         }
-    }
-    // Unreachable
+        // Unreachable
+
 }
+
 
 // Callbacks / ISRs
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
-    U8 i;
-
-    last_adc_interrupt_delta = this_adc_interrupt_delta;
-    this_adc_interrupt_delta = (U16) htim16.Instance->CNT;
-    htim16.Instance->CNT = 0;
-    HAL_TIM_Base_Start(&htim16);
-
-    for (i = 0; i < NUM_ADC_CHANNELS; i++) {
-        // Reset data states when next round of ADC data is in
-        channel_data_states[i] = UNUSED;
-    }
+    // Let the OS loop know that the conversion is done
+    restart_adc_flag = 1;
 }
 

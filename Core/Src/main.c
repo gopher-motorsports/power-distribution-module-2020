@@ -56,7 +56,7 @@ UART_HandleTypeDef huart2;
 osThreadId_t Channel_controlHandle;
 const osThreadAttr_t Channel_control_attributes = {
   .name = "Channel_control",
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 128 * 4
 };
 /* Definitions for CAN_TX_task */
@@ -64,6 +64,13 @@ osThreadId_t CAN_TX_taskHandle;
 const osThreadAttr_t CAN_TX_task_attributes = {
   .name = "CAN_TX_task",
   .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128 * 4
+};
+/* Definitions for ADC_scheduler */
+osThreadId_t ADC_schedulerHandle;
+const osThreadAttr_t ADC_scheduler_attributes = {
+  .name = "ADC_scheduler",
+  .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 128 * 4
 };
 /* USER CODE BEGIN PV */
@@ -81,6 +88,7 @@ static void MX_TIM16_Init(void);
 static void MX_TIM17_Init(void);
 void ADC_Channel_Control(void *argument);
 void CAN_TX(void *argument);
+void ADC_Schedule_loop(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -159,6 +167,9 @@ int main(void)
 
   /* creation of CAN_TX_task */
   CAN_TX_taskHandle = osThreadNew(CAN_TX, NULL, &CAN_TX_task_attributes);
+
+  /* creation of ADC_scheduler */
+  ADC_schedulerHandle = osThreadNew(ADC_Schedule_loop, NULL, &ADC_scheduler_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -518,9 +529,29 @@ void CAN_TX(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1000);
+    //GO4 CAN TX TASK
+    osDelay(10);
   }
   /* USER CODE END CAN_TX */
+}
+
+/* USER CODE BEGIN Header_ADC_Schedule_loop */
+/**
+* @brief Function implementing the ADC_scheduler thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ADC_Schedule_loop */
+void ADC_Schedule_loop(void *argument)
+{
+  /* USER CODE BEGIN ADC_Schedule_loop */
+  /* Infinite loop */
+  for(;;)
+  {
+    Schedule_ADC();
+    Error_Handler();
+  }
+  /* USER CODE END ADC_Schedule_loop */
 }
 
  /**
