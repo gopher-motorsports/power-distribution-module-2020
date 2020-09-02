@@ -108,8 +108,8 @@ static PDM_Device_t test_device_1 =
         .gpio_control_pin       = GPIO_PIN_3,
         .channel_setpoint       = 3500,
         .max_channel_integral   = 2000,
-        .device_fet_IS_ratio    = 13000,
-        .channel_resistor_val   = 10000,
+        .device_fet_IS_ratio    = 13000, // Comment HO'C: This should be a #define
+        .channel_resistor_val   = 10000, // Comment HO'C: Why not use the #define for this?
         .state                  = NORMAL,
         .device_name            = CHANNEL_1_DEVICE
 };
@@ -122,8 +122,8 @@ static PDM_Device_t test_device_2 =
         .gpio_control_pin       = GPIO_PIN_4,
         .channel_setpoint       = 3500,
         .max_channel_integral   = 2000,
-        .device_fet_IS_ratio    = 13000,
-        .channel_resistor_val   = 10000,
+        .device_fet_IS_ratio    = 13000, // Comment HO'C: This should be a #define
+        .channel_resistor_val   = 10000, // Comment HO'C: Why not use the #define for this?
         .state                  = NORMAL,
         .device_name            = CHANNEL_2_DEVICE
 };
@@ -136,8 +136,8 @@ static PDM_Device_t test_device_3 =
         .gpio_control_pin       = GPIO_PIN_5,
         .channel_setpoint       = 3500,
         .max_channel_integral   = 2000,
-        .device_fet_IS_ratio    = 13000,
-        .channel_resistor_val   = 10000,
+        .device_fet_IS_ratio    = 13000, // Comment HO'C: This should be a #define
+        .channel_resistor_val   = 10000, // Comment HO'C: Why not use the #define for this?
         .state                  = NORMAL,
         .device_name            = CHANNEL_4_DEVICE
 };
@@ -145,6 +145,7 @@ static PDM_Device_t test_device_3 =
 
 // MUST PUT DEVICES IN ORDER OF ADC CHANNEL NO. FROM LOWEST TO HIGHEST
 // so the current buffer value contains the correct value for each device
+// Comment HO'C: I think this should be a multi-dimensonal array to do some software filtering
 static U16          current_buffer[NUM_ADC_CHANNELS];
 static PDM_Device_t pdm_devices[] = { test_device_1, test_device_2, test_device_3 };
 
@@ -159,6 +160,7 @@ void Log_CAN_Messages(void) {
 void PDM_Init(void) {
     PDM_Device_t*   device;
 
+    // Comment HO'C: This should probably be the last thing you do in this function
     // Enable Channels
     for (device = pdm_devices; device < pdm_devices + NUM_ADC_CHANNELS; device++) {
         HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
@@ -193,20 +195,23 @@ void Schedule_ADC(void) {
 
             for (i = 0, adc_val = current_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 // save current data so DMA doesnt overwrite it
+                // Comment HO'C: Should check if this is atomic/reentrant
                 temp_current_buffer[i] = *adc_val;
             }
 
             HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS);
 
-
+            // Comment HO'C: Quality content
             // do math while ADC goes brrrrrr
             timer_val = htim16.Instance->CNT + NUM_ADC_CHANNELS; // add 1us per channel, due to adc conversion time
+            // Comment HO'C: Great use of a for loop
             for (adc_val = temp_current_buffer, device = pdm_devices;
                         device < pdm_devices + NUM_ADC_CHANNELS; adc_val++, device++) {
                 voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
                 load_current = ((voltage * device->device_fet_IS_ratio) / device->channel_resistor_val) / MA_IN_A;
 
                 // get rid of this if/else?
+                // Comment HO'C: I agree, a signed type might make this cleaner
                 if (load_current > device->channel_setpoint) {
                     channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
                 } else {
@@ -273,6 +278,7 @@ void Current_Control_Loop(void) {
                             device->restart_timeout_ref = htim17.Instance->CNT;
                             device->state = RESTART_OFF;
                         } else {
+                            // Comment HO'C: Maybe what I said earlier was wrong, should def turn off here
                             device->state = PERMANENT_OFF;
                         }
                     }

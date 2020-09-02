@@ -13,20 +13,22 @@
 
 // Defines
 #define NUM_ADC_CHANNELS 3
+// Comment HO'C: This should maybe be on a per-module basis
 #define DEVICE_RESTART_TIMEOUT_MS 1000 //Max of 65000 when at 48MHZ with prescalar of 48000 (16 bit timer, no overflow)
 #define GPIO_CONTROL_PORT GPIOB
-#define MAX_16b_TIMER_VALUE 65536
-#define ADC_REF_VOLTAGE ((double) 3.3)
-#define US_IN_S 1000000
-#define MA_IN_A 1000
-#define MAX_12b_ADC_VAL ((double) 4096)
+#define MAX_16b_TIMER_VALUE 65536 // Comment HO'C: This is great
+#define ADC_REF_VOLTAGE ((double) 3.3) // Comment HO'C: This is great
+#define US_IN_S 1000000 // Comment HO'C: This is great
+#define MA_IN_A 1000 // Comment HO'C: This is great
+#define MAX_12b_ADC_VAL ((double) 4096) // Comment HO'C: This is great
 
 // Resistor Values
-#define CHANNEL_ONE_RESISTOR_VALUE  10000
-#define CHANNEL_TWO_RESISTOR_VALUE  10000
-#define CHANNEL_FOUR_RESISTOR_VALUE 10000
+#define CHANNEL_ONE_RESISTOR_VALUE  10000 // Comment HO'C: This is great
+#define CHANNEL_TWO_RESISTOR_VALUE  10000 // Comment HO'C: This is great
+#define CHANNEL_FOUR_RESISTOR_VALUE 10000 // Comment HO'C: This is great
 
 // Typedefs
+// Comment HO'C: Great stuff here
 typedef struct {
     U8             num_restart_attempts;    // How many time the channel will restart itself
     double         channel_integral;        // Current integral value (milliamps * seconds)
