@@ -55,30 +55,98 @@ extern TIM_HandleTypeDef htim17;
  };
  */
 
-static U8 restart_adc_flag;
-static U32 avg_adc_interrupt_delta;
-static U32 adc_interrupt_cnt;
-static U64 adc_delta_sum;
 
 // a current draw above this defines an overcurrent event
+/*
 static U16 channel_zero_max_setpoint = 3500;
 static U16 channel_one_max_setpoint  = 3500;
 static U16 channel_four_max_setpoint = 3500;
 
+static U16 channel_zero_integral_max = 3500;
+static U16 channel_one_integral_max  = 3500;
+static U16 channel_four_integral_max = 3500;
 
-// Channel Information
-//static U8                   adc_channels[]          = { ADC_CHANNEL_0, ADC_CHANNEL_1, ADC_CHANNEL_4 };
-static U8                   num_restart_attempts[]  = { 10, 10, 10 };
-static U16                  gpio_control_pins[]     = { GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 }; // Pay attention to ordering!!
-static U16                  *channel_setpoints[]    = { &channel_zero_max_setpoint, &channel_one_max_setpoint, &channel_four_max_setpoint };
+static U16 channel_zero_fet_ratio = 13000;
+static U16 channel_one_fet_ratio  = 13000;
+static U16 channel_four_fet_ratio = 13000;
 
-static U16                  current_buffer[NUM_ADC_CHANNELS];
+*/
+
+//static PDM_Device_t devices[NUM_ADC_CHANNELS];
+
+// Channel Information (consider putting in a struct)
+//static U8                   adc_channels[]            = { ADC_CHANNEL_0, ADC_CHANNEL_1, ADC_CHANNEL_4 };
+/*
+static U8                   num_restart_attempts[]      = { 10, 10, 10 };
+static U16                  gpio_control_pins[]         = { GPIO_PIN_3, GPIO_PIN_4, GPIO_PIN_5 }; // Pay attention to ordering!!
+static U16*                 channel_setpoints[]         = { &channel_zero_max_setpoint, &channel_one_max_setpoint, &channel_four_max_setpoint };
+static U16*                 channel_integral_maxes[]    = { &channel_zero_integral_max, &channel_one_integral_max, &channel_four_integral_max };
+static U16*                 device_fet_current_ratios[] = { &channel_zero_fet_ratio, &channel_one_fet_ratio, &channel_four_fet_ratio};
+static U32                  channel_resistors[]         = { CHANNEL_ONE_RESISTOR_VALUE, CHANNEL_TWO_RESISTOR_VALUE, CHANNEL_FOUR_RESISTOR_VALUE };
+
 static U16                  current_overage_integrals[NUM_ADC_CHANNELS]; // units of milliamps * seconds
-static
 static U16                  restart_timeout_ref[NUM_ADC_CHANNELS];
 
-static ADC_CHANNEL_STATE    channel_states[]        = { NORMAL, NORMAL, NORMAL };
+
+static CHANNEL_STATE channel_states[] = { NORMAL, NORMAL, NORMAL };
+*/
 //static CURRENT_DATA_STATE   channel_data_states[]   = { USED, USED, USED };	// Dont want to use inital data in calculation
+
+static U8  restart_adc_flag;
+static U32 avg_adc_interrupt_delta;
+static U32 adc_interrupt_cnt;
+static U64 adc_delta_sum;
+
+
+
+// Define the device settings
+static PDM_Device_t test_device_1 =
+{
+        .num_restart_attempts   = 10,
+        .channel_integral       = 0,
+        .restart_timeout_ref    = 0,
+        .gpio_control_pin       = GPIO_PIN_3,
+        .channel_setpoint       = 3500,
+        .max_channel_integral   = 2000,
+        .device_fet_IS_ratio    = 13000,
+        .channel_resistor_val   = 10000,
+        .state                  = NORMAL,
+        .device_name            = CHANNEL_1_DEVICE
+};
+
+static PDM_Device_t test_device_2 =
+{
+        .num_restart_attempts   = 10,
+        .channel_integral       = 0,
+        .restart_timeout_ref    = 0,
+        .gpio_control_pin       = GPIO_PIN_4,
+        .channel_setpoint       = 3500,
+        .max_channel_integral   = 2000,
+        .device_fet_IS_ratio    = 13000,
+        .channel_resistor_val   = 10000,
+        .state                  = NORMAL,
+        .device_name            = CHANNEL_2_DEVICE
+};
+
+static PDM_Device_t test_device_3 =
+{
+        .num_restart_attempts   = 10,
+        .channel_integral       = 0,
+        .restart_timeout_ref    = 0,
+        .gpio_control_pin       = GPIO_PIN_5,
+        .channel_setpoint       = 3500,
+        .max_channel_integral   = 2000,
+        .device_fet_IS_ratio    = 13000,
+        .channel_resistor_val   = 10000,
+        .state                  = NORMAL,
+        .device_name            = CHANNEL_4_DEVICE
+};
+
+
+// MUST PUT DEVICES IN ORDER OF ADC CHANNEL NO. FROM LOWEST TO HIGHEST
+// so the current buffer value contains the correct value for each device
+static U16          current_buffer[NUM_ADC_CHANNELS];
+static PDM_Device_t pdm_devices[] = { test_device_1, test_device_2, test_device_3 };
 
 
 // Functions
@@ -89,14 +157,13 @@ void Log_CAN_Messages(void) {
 
 
 void PDM_Init(void) {
-    U8 i;
+    PDM_Device_t*   device;
 
-    // Set timers to 0 (may not need to do this)
     // Enable Channels
-    for (i = 0; i < NUM_ADC_CHANNELS; i++) {
-        HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[i],
-                GPIO_PIN_SET);
+    for (device = pdm_devices; device < pdm_devices + NUM_ADC_CHANNELS; device++) {
+        HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
     }
+
     // Unsure about this auto calibration
     HAL_ADCEx_Calibration_Start(&hadc);		// start cal before starting adc
 
@@ -112,27 +179,53 @@ void PDM_Init(void) {
 
 
 void Schedule_ADC(void) {
-    U8  i;
-    U16 temp_current_buffer[NUM_ADC_CHANNELS];
+    U8              i;
+    U16*            adc_val;
+    U16             temp_current_buffer[NUM_ADC_CHANNELS];
+    U32             timer_val;                              // in microseconds
+    double          load_current;                           // in milliamps
+    double          voltage;                                // in Volts
+    PDM_Device_t*   device;
 
     while (1) {
         if (restart_adc_flag) {
             restart_adc_flag = 0;       // reset flag before DMA start so sw wont clear flag after interrupt
 
-            for (i = 0; i < NUM_ADC_CHANNELS; i++) {
+            for (i = 0, adc_val = current_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 // save current data so DMA doesnt overwrite it
-                temp_current_buffer[i] = current_buffer[i];
+                temp_current_buffer[i] = *adc_val;
             }
 
             HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS);
 
-            // calculate average interrupt delta
-            adc_delta_sum += htim16.Instance->CNT;
-            adc_interrupt_cnt++;
-            avg_adc_interrupt_delta = adc_delta_sum / adc_interrupt_cnt;
 
+            // do math while ADC goes brrrrrr
+            timer_val = htim16.Instance->CNT + NUM_ADC_CHANNELS; // add 1us per channel, due to adc conversion time
+            for (adc_val = temp_current_buffer, device = pdm_devices;
+                        device < pdm_devices + NUM_ADC_CHANNELS; adc_val++, device++) {
+                voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
+                load_current = ((voltage * device->device_fet_IS_ratio) / device->channel_resistor_val) / MA_IN_A;
+
+                // get rid of this if/else?
+                if (load_current > device->channel_setpoint) {
+                    channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
+                } else {
+                    channel_integral -= (device->channel_setpoint - load_current) *  (timer_val / US_IN_S);
+                    if (channel_integral < 0) {
+                        channel_integral = 0;
+                    }
+                }
+                timer_val--; // subtract 1us because the next channel was converted after this one
+            }
+
+            // restart the timer
             htim16.Instance->CNT = 0;
-            HAL_TIM_Base_Start(&htim16);
+
+            // calculate average interrupt delta
+            /*adc_delta_sum += htim16.Instance->CNT;
+            adc_interrupt_cnt++;
+            avg_adc_interrupt_delta = adc_delta_sum / adc_interrupt_cnt;*/
+
         }
     }
 }
@@ -140,51 +233,50 @@ void Schedule_ADC(void) {
 
 
 void Current_Control_Loop(void) {
-    U8 adc_channels_idx = 0;
-    U16 time_ref, curr_time, time_diff;
+    U16           time_ref;
+    U16           curr_time;
+    U16           time_diff;
+    PDM_Device_t* device;
 
+    device = pdm_devices;
     // Infinite loop cycles through NUM_ADC_CHANNELS state machines, one for each channel
     while (1) {
-
-        switch (channel_states[adc_channels_idx]) {
+        switch (device->state) {
             case PERMANENT_OFF:
-                // Ensure current off??
+                HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_RESET);
                 break;
 
             case RESTART_OFF:
                 curr_time = htim17.Instance->CNT;
-                time_ref = restart_timeout_ref[adc_channels_idx];
+                time_ref = device->restart_timeout_ref;
                 if (curr_time < time_ref) {
-                    time_diff = (MAX_TIMER_VALUE - time_ref) + curr_time;
+                    time_diff = (MAX_16b_TIMER_VALUE - time_ref) + curr_time;
                 } else {
                     time_diff = curr_time - time_ref;
                 }
 
                 if (time_diff >= DEVICE_RESTART_TIMEOUT_MS) {
                     // turn the channel back on
-                    HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[adc_channels_idx],
-                                                                                GPIO_PIN_SET);
-                    channel_states[adc_channels_idx] = NORMAL;
+                    HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
+                    device->state = NORMAL;
                 }
                 break;
 
             case NORMAL:
-                    if (current_overage_integrals[adc_channels_idx] >= *channel_setpoints[adc_channels_idx]) {
-                        // Overcurrent event (level triggered)
+                    if (device->channel_integral >= device->max_channel_integral) {
+                        // Shut off
                         // turn off control pin
-                        HAL_GPIO_WritePin(GPIO_CONTROL_PORT, gpio_control_pins[adc_channels_idx],
-                                                                                  GPIO_PIN_RESET);
-                        if (num_restart_attempts[adc_channels_idx] > 0) {
-                            num_restart_attempts[adc_channels_idx]--;
-                            restart_timeout_ref[adc_channels_idx] =
-                                    htim17.Instance->CNT;
-                            channel_states[adc_channels_idx] = RESTART_OFF;
+                        HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_RESET);
+
+                        if (device->num_restart_attempts > 0) {
+                            device->num_restart_attempts--;
+                            device->restart_timeout_ref = htim17.Instance->CNT;
+                            device->state = RESTART_OFF;
                         } else {
-                            channel_states[adc_channels_idx] = PERMANENT_OFF;
+                            device->state = PERMANENT_OFF;
                         }
                     }
-                }
-                break;
+                    break;
 
             default:
                 Error_Handler();
@@ -193,12 +285,12 @@ void Current_Control_Loop(void) {
 
         //Log_CAN_Messages();
 
-        adc_channels_idx++;
-        if (adc_channels_idx >= NUM_ADC_CHANNELS) {
-            adc_channels_idx = 0;
+        device++;
+        if (device > pdm_devices + NUM_ADC_CHANNELS - 1) {
+            device = pdm_devices;
         }
+    }
         // Unreachable
-
 }
 
 
