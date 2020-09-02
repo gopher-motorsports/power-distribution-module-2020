@@ -31,6 +31,7 @@
 // Comment HO'C: Great stuff here
 typedef struct {
     U8             num_restart_attempts;    // How many time the channel will restart itself
+    U16            channel_restart_timeout; // How long before the channel attempts to restart itself
     double         channel_integral;        // Current integral value (milliamps * seconds)
     U16            restart_timeout_ref;     // Timer value when overcurrent event was detected (ms)
     U16            gpio_control_pin;        // Channel control pin number

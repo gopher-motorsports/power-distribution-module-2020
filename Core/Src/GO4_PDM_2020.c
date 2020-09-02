@@ -102,21 +102,23 @@ static U64 adc_delta_sum;
 // Define the device settings
 static PDM_Device_t test_device_1 =
 {
-        .num_restart_attempts   = 10,
-        .channel_integral       = 0,
-        .restart_timeout_ref    = 0,
-        .gpio_control_pin       = GPIO_PIN_3,
-        .channel_setpoint       = 3500,
-        .max_channel_integral   = 2000,
-        .device_fet_IS_ratio    = 13000, // Comment HO'C: This should be a #define
-        .channel_resistor_val   = 10000, // Comment HO'C: Why not use the #define for this?
-        .state                  = NORMAL,
-        .device_name            = CHANNEL_1_DEVICE
+        .num_restart_attempts    = 10,
+        .channel_restart_timeout = 1000,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = GPIO_PIN_3,
+        .channel_setpoint        = 3500,
+        .max_channel_integral    = 2000,
+        .device_fet_IS_ratio     = 13000, // Comment HO'C: This should be a #define
+        .channel_resistor_val    = 10000, // Comment HO'C: Why not use the #define for this?
+        .state                   = NORMAL,
+        .device_name             = CHANNEL_1_DEVICE
 };
 
 static PDM_Device_t test_device_2 =
 {
         .num_restart_attempts   = 10,
+        .channel_restart_timeout = 1000,
         .channel_integral       = 0,
         .restart_timeout_ref    = 0,
         .gpio_control_pin       = GPIO_PIN_4,
@@ -131,6 +133,7 @@ static PDM_Device_t test_device_2 =
 static PDM_Device_t test_device_3 =
 {
         .num_restart_attempts   = 10,
+        .channel_restart_timeout = 1000,
         .channel_integral       = 0,
         .restart_timeout_ref    = 0,
         .gpio_control_pin       = GPIO_PIN_5,
@@ -193,6 +196,7 @@ void Schedule_ADC(void) {
         if (restart_adc_flag) {
             restart_adc_flag = 0;       // reset flag before DMA start so sw wont clear flag after interrupt
 
+            // compute filter
             for (i = 0, adc_val = current_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 // save current data so DMA doesnt overwrite it
                 // Comment HO'C: Should check if this is atomic/reentrant
@@ -210,16 +214,12 @@ void Schedule_ADC(void) {
                 voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
                 load_current = ((voltage * device->device_fet_IS_ratio) / device->channel_resistor_val) / MA_IN_A;
 
-                // get rid of this if/else?
                 // Comment HO'C: I agree, a signed type might make this cleaner
-                if (load_current > device->channel_setpoint) {
-                    channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
-                } else {
-                    channel_integral -= (device->channel_setpoint - load_current) *  (timer_val / US_IN_S);
-                    if (channel_integral < 0) {
-                        channel_integral = 0;
-                    }
+                channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
+                if (channel_integral < 0) {
+                    channel_integral = 0;
                 }
+
                 timer_val--; // subtract 1us because the next channel was converted after this one
             }
 
@@ -248,7 +248,6 @@ void Current_Control_Loop(void) {
     while (1) {
         switch (device->state) {
             case PERMANENT_OFF:
-                HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_RESET);
                 break;
 
             case RESTART_OFF:
@@ -260,7 +259,7 @@ void Current_Control_Loop(void) {
                     time_diff = curr_time - time_ref;
                 }
 
-                if (time_diff >= DEVICE_RESTART_TIMEOUT_MS) {
+                if (time_diff >= device->channel_restart_timeout) {
                     // turn the channel back on
                     HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
                     device->state = NORMAL;
@@ -278,7 +277,6 @@ void Current_Control_Loop(void) {
                             device->restart_timeout_ref = htim17.Instance->CNT;
                             device->state = RESTART_OFF;
                         } else {
-                            // Comment HO'C: Maybe what I said earlier was wrong, should def turn off here
                             device->state = PERMANENT_OFF;
                         }
                     }
@@ -304,5 +302,6 @@ void Current_Control_Loop(void) {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     // Let the OS loop know that the conversion is done
     restart_adc_flag = 1;
+
 }
 
