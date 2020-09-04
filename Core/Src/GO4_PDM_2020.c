@@ -141,7 +141,7 @@ void Schedule_ADC(void) {
             for (i = 0, adc_val = averaged_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 temp_current_buffer[i] = *adc_val;
             }
-            osDelay(10);
+            //osDelay(10);
             // timestamp now so DMA doesnt restart timer on interrupt
             timer_val = htim16.Instance->CNT + (CURRENT_BUFFER_SIZE * ADC_US_PER_SAMPLE); // adjust for ADC conversion time
 

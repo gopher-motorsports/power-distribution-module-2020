@@ -56,7 +56,7 @@ UART_HandleTypeDef huart2;
 osThreadId_t Channel_controlHandle;
 const osThreadAttr_t Channel_control_attributes = {
   .name = "Channel_control",
-  .priority = (osPriority_t) osPriorityAboveNormal,
+  .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 128 * 4
 };
 /* Definitions for CAN_TX_task */
