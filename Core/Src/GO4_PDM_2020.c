@@ -38,7 +38,7 @@ static PDM_Device_t test_device_1 =
         .gpio_control_pin        = DEVICE_ONE_GPIO_PIN,
         .channel_setpoint        = DEVICE_ONE_SETPOINT,
         .max_channel_integral    = DEVICE_ONE_MAX_CHANNEL_INTEGRAL,
-        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
         .channel_resistor_val    = DEVICE_ONE_RESISTOR_VALUE,
         .state                   = DEVICE_ONE_INITIAL_STATE,
         .device_name             = CHANNEL_1_DEVICE
@@ -51,9 +51,9 @@ static PDM_Device_t test_device_2 =
         .channel_integral        = 0,
         .restart_timeout_ref     = 0,
         .gpio_control_pin        = GPIO_PIN_4,
-        .channel_setpoint        = 3500,
-        .max_channel_integral    = 2000,
-        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_setpoint        = 10,
+        .max_channel_integral    = 50,
+        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
         .channel_resistor_val    = DEVICE_TWO_RESISTOR_VALUE,
         .state                   = NORMAL,
         .device_name             = CHANNEL_2_DEVICE
@@ -66,9 +66,9 @@ static PDM_Device_t test_device_3 =
         .channel_integral        = 0,
         .restart_timeout_ref     = 0,
         .gpio_control_pin        = GPIO_PIN_5,
-        .channel_setpoint        = 3500,
-        .max_channel_integral    = 2000,
-        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_setpoint        = 10,
+        .max_channel_integral    = 50,
+        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
         .channel_resistor_val    = DEVICE_FOUR_RESISTOR_VALUE,
         .state                   = NORMAL,
         .device_name             = CHANNEL_4_DEVCIE
@@ -80,7 +80,11 @@ static PDM_Device_t test_device_3 =
 static U8           conv_cplt_flag;
 static U16          current_buffer[CURRENT_BUFFER_SIZE];
 static U16          averaged_buffer[NUM_ADC_CHANNELS];
-static PDM_Device_t pdm_devices[] = { test_device_1, test_device_2, test_device_3 };
+static PDM_Device_t pdm_devices[NUM_ADC_CHANNELS];
+
+static U64 total_time;
+static U64 num_interrupts;
+static U16 average_time_val;
 
 
 //********** Function Definitions **********/
@@ -92,6 +96,10 @@ void Log_CAN_Messages(void) {
 
 void PDM_Init(void) {
     PDM_Device_t*   device;
+
+    pdm_devices[0] = test_device_1;
+    pdm_devices[1] = test_device_2;
+    pdm_devices[2] = test_device_3;
 
     // Unsure about this auto calibration
     HAL_ADCEx_Calibration_Start(&hadc);		// start cal before starting adc
@@ -133,10 +141,12 @@ void Schedule_ADC(void) {
             for (i = 0, adc_val = averaged_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 temp_current_buffer[i] = *adc_val;
             }
-
+            osDelay(10);
             // timestamp now so DMA doesnt restart timer on interrupt
             timer_val = htim16.Instance->CNT + (CURRENT_BUFFER_SIZE * ADC_US_PER_SAMPLE); // adjust for ADC conversion time
-            HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, NUM_ADC_CHANNELS);
+
+
+            HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, CURRENT_BUFFER_SIZE);
 
             // do math while ADC goes brrrrrr
 
@@ -145,7 +155,7 @@ void Schedule_ADC(void) {
                 // Skip calculation of integral for special devices
                 if (!(device->device_name == TEMP_SENSOR || device->device_name == SPECIAL_DEVICE)) {
                     voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
-                    load_current = ((voltage * device->device_fet_IL_IS_ratio) / device->channel_resistor_val) / MA_IN_A;
+                    load_current = ((voltage * device->device_fet_IL_IS_ratio) / device->channel_resistor_val) * MA_IN_A;
                     device->channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
 
                     if (device->channel_integral < 0) {
@@ -153,6 +163,9 @@ void Schedule_ADC(void) {
                     }
                 }
             }
+            num_interrupts++;
+            total_time += timer_val;
+            average_time_val = total_time / num_interrupts;
         }
     }
 }
@@ -193,6 +206,7 @@ void Current_Control_Loop(void) {
                     if (time_diff >= device->channel_restart_timeout) {
                         // turn the channel back on
                         HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
+                        device->channel_integral = 0;
                         device->state = NORMAL;
                     }
                     break;
@@ -242,7 +256,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     // vTaskSuspendAll();
 
     // reset timer
-    &htim16.Instance->CNT = 0;
+    htim16.Instance->CNT = 0;
 
     // Stop DMA to stop interrupts
     HAL_ADC_Stop_DMA(&hadc);
@@ -256,7 +270,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     for (i = 0, current_ptr = current_buffer; current_ptr < current_buffer + CURRENT_BUFFER_SIZE; current_ptr++) {
         averaged_buffer[i] += *current_ptr;
         i++;
-        if (i % NUM_SAMPLES_PER_CHANNEL == 0) {
+        if (i % (NUM_SAMPLES_PER_CHANNEL) == 0) {
             i = 0;
         }
     }

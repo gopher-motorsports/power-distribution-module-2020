@@ -16,8 +16,8 @@
 //********** Defines **********/
 // Channel/buffer information
 #define NUM_ADC_CHANNELS 3
-#define NUM_SAMPLES_PER_CHANNEL 4   //
-#define CURRENT_BUFFER_SIZE 12      // NUM_ADC_CHANNELS * NUM_SAMPLES_PER_CHANNEL
+#define NUM_SAMPLES_PER_CHANNEL 3   //
+#define CURRENT_BUFFER_SIZE 9       // NUM_ADC_CHANNELS * NUM_SAMPLES_PER_CHANNEL
 
 // Conversion stuff
 #define BTS50085_IL_IS_RATIO 13000
@@ -38,39 +38,23 @@
 #define DEVICE_ONE_RESRART_ATTEMPTS 10
 #define DEVICE_ONE_RESTART_TIMEOUT DEFAULT_DEVICE_RESTART_TIMEOUT_MS
 #define DEVICE_ONE_GPIO_PIN GPIO_PIN_3
-#define DEVICE_ONE_SETPOINT 3500
-#define DEVICE_ONE_MAX_CHANNEL_INTEGRAL 2000
-#define DEVICE_ONE_RESISTOR_VALUE  10000
+#define DEVICE_ONE_SETPOINT 10
+#define DEVICE_ONE_MAX_CHANNEL_INTEGRAL 50
+#define DEVICE_ONE_RESISTOR_VALUE  210
 #define DEVICE_ONE_INITIAL_STATE NORMAL
 
 
 // DEVICE_2
-#define DEVICE_TWO_RESISTOR_VALUE  10000
+#define DEVICE_TWO_RESISTOR_VALUE  210
 
 
 
 // DEVICE_4
-#define DEVICE_FOUR_RESISTOR_VALUE 10000
+#define DEVICE_FOUR_RESISTOR_VALUE 210
 
 
 
 //********** Typedefs **********/
-typedef struct {
-    U8             num_restart_attempts;    // How many time the channel will restart itself
-    U16            channel_restart_timeout; // How long before the channel attempts to restart itself
-    double         channel_integral;        // Current integral value (milliamps * seconds)
-    U16            restart_timeout_ref;     // Timer value when overcurrent event was detected (ms)
-    U16            gpio_control_pin;        // Channel control pin number
-    U16            channel_setpoint;        // value which defines over or undercurrent (milliamps)
-    U16            max_channel_integral;    // max current integral allowed before shutoff (milliamps * seconds)
-    U16            device_fet_IL_IS_ratio;  // IL:IS (no units)
-    U32            channel_resistor_val;    // Value of resistor attached to IS (Ohms)
-    CHANNEL_STATE  state;                   // channel state
-    DEVICE_NAME    device_name;             // Name of this device
-} PDM_Device_t;
-
-
-
 typedef enum {
     CHANNEL_1_DEVICE = 0,
     CHANNEL_2_DEVICE = 1,
@@ -86,6 +70,22 @@ typedef enum {
     RESTART_OFF   = 1,	// Channel off, will attempt to restart
     PERMANENT_OFF = 2   // Channel off forever
 } CHANNEL_STATE;
+
+
+
+typedef struct {
+    U8             num_restart_attempts;    // How many time the channel will restart itself
+    U16            channel_restart_timeout; // How long before the channel attempts to restart itself
+    double         channel_integral;        // Current integral value (milliamps * seconds)
+    U16            restart_timeout_ref;     // Timer value when overcurrent event was detected (ms)
+    U16            gpio_control_pin;        // Channel control pin number
+    U16            channel_setpoint;        // value which defines over or undercurrent (milliamps)
+    U16            max_channel_integral;    // max current integral allowed before shutoff (milliamps * seconds)
+    U16            device_fet_IL_IS_ratio;  // IL:IS (no units)
+    U32            channel_resistor_val;    // Value of resistor attached to IS (Ohms)
+    CHANNEL_STATE  state;                   // channel state
+    DEVICE_NAME    device_name;             // Name of this device
+} PDM_Device_t;
 
 
 
