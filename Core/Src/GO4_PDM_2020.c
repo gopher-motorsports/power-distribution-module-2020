@@ -29,6 +29,8 @@ extern TIM_HandleTypeDef htim17;
 
 //********** Globals **********/
 // Define the device settings
+
+// @H'OC All devices will look like this one in terms of Macros
 static PDM_Device_t test_device_1 =
 {
         .num_restart_attempts    = DEVICE_ONE_RESRART_ATTEMPTS,
@@ -38,7 +40,7 @@ static PDM_Device_t test_device_1 =
         .gpio_control_pin        = DEVICE_ONE_GPIO_PIN,
         .channel_setpoint        = DEVICE_ONE_SETPOINT,
         .max_channel_integral    = DEVICE_ONE_MAX_CHANNEL_INTEGRAL,
-        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
+        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO, (one for now for testing purposes)
         .channel_resistor_val    = DEVICE_ONE_RESISTOR_VALUE,
         .state                   = DEVICE_ONE_INITIAL_STATE,
         .device_name             = CHANNEL_1_DEVICE
@@ -75,16 +77,18 @@ static PDM_Device_t test_device_3 =
 };
 
 
-// MUST PUT DEVICES IN ORDER OF ADC CHANNEL NO. FROM LOWEST TO HIGHEST
-// so the current buffer value contains the correct value for each device
+
 static U8           conv_cplt_flag;
 static U16          current_buffer[CURRENT_BUFFER_SIZE];
 static U16          averaged_buffer[NUM_ADC_CHANNELS];
 static PDM_Device_t pdm_devices[NUM_ADC_CHANNELS];
 
-static U64 total_time;
-static U64 num_interrupts;
-static U16 average_time_val;
+/*
+Diagnostic vars for adc frequency
+static U64          total_time;
+static U64          num_interrupts;
+static U16          average_time_val;
+*/
 
 
 //********** Function Definitions **********/
@@ -93,10 +97,19 @@ void Log_CAN_Messages(void) {
 }
 
 
-
+/*
+ * Args:
+ * none
+ *
+ * Info:
+ * Runs before OS kernal starts to initialize
+ * peripherals and other general setup
+ */
 void PDM_Init(void) {
     PDM_Device_t*   device;
 
+    // MUST PUT DEVICES IN ORDER OF ADC CHANNEL NO. FROM LOWEST TO HIGHEST
+    // so the current buffer value contains the correct value for each device
     pdm_devices[0] = test_device_1;
     pdm_devices[1] = test_device_2;
     pdm_devices[2] = test_device_3;
@@ -124,6 +137,16 @@ void PDM_Init(void) {
 
 
 
+/*
+ * Args:
+ * none
+ *
+ * Info:
+ * OS task that calculates the current overage
+ * integral. Only runs when a new set of averages
+ * has been calcuclated by the ADC callback,
+ * 'HAL_ADC_ConvCpltCallback'
+ */
 void Schedule_ADC(void) {
     U8              i;
     U16*            adc_val;
@@ -141,7 +164,7 @@ void Schedule_ADC(void) {
             for (i = 0, adc_val = averaged_buffer; i < NUM_ADC_CHANNELS; adc_val++, i++) {
                 temp_current_buffer[i] = *adc_val;
             }
-            //osDelay(10);
+
             // timestamp now so DMA doesnt restart timer on interrupt
             timer_val = htim16.Instance->CNT + (CURRENT_BUFFER_SIZE * ADC_US_PER_SAMPLE); // adjust for ADC conversion time
 
@@ -163,15 +186,28 @@ void Schedule_ADC(void) {
                     }
                 }
             }
+/*
+            Diagnostic code for adc frequency
             num_interrupts++;
             total_time += timer_val;
             average_time_val = total_time / num_interrupts;
+
+*/
         }
     }
 }
 
 
 
+/*
+ * Args:
+ * none
+ *
+ * Info:
+ * OS task that monitors the state of each channel
+ * and is responsible for stopping and restarting
+ * each channel.
+ */
 void Current_Control_Loop(void) {
     U16           time_ref;
     U16           curr_time;
@@ -213,7 +249,6 @@ void Current_Control_Loop(void) {
 
                 case NORMAL:
                         if (device->channel_integral >= device->max_channel_integral ) {
-                            // Shut off
                             // turn off control pin
                             HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_RESET);
 
@@ -246,6 +281,16 @@ void Current_Control_Loop(void) {
 
 
 //********** Callbacks/ISRs **********/
+/* Args:
+ * ADC_HandleTypeDef: the handle to the ADC that interrupted
+ *
+ * Info:
+ * This function is called by HW when the DMA buffer becomes full.
+ * This function resets timer 16, Stops the DMA, and calculates
+ * the channel average adc value over 'NUM_SAMPLES_PER_CHANNEL' samples
+ * it places the averages into the global 'averaged_buffer'
+ *
+ */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     U8   i;
     U16* current_ptr;
@@ -270,7 +315,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     for (i = 0, current_ptr = current_buffer; current_ptr < current_buffer + CURRENT_BUFFER_SIZE; current_ptr++) {
         averaged_buffer[i] += *current_ptr;
         i++;
-        if (i % (NUM_SAMPLES_PER_CHANNEL) == 0) {
+        if (i % NUM_SAMPLES_PER_CHANNEL == 0) {
             i = 0;
         }
     }
@@ -280,7 +325,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
         *current_ptr /= NUM_SAMPLES_PER_CHANNEL;
     }
 
-    // average buffer?
     conv_cplt_flag = 1;
 
     //xTaskResumeAll(); only call if vTaskSuspendAll() is called
