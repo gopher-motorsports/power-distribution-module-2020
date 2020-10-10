@@ -15,13 +15,13 @@
 //********** Project Includes **********/
 #include "base_types.h"
 #include "GO4_PDM_2020.h"
+#include "GopherCAN.h"
 
 
 
 //********** Peripheral Handles **********/
 extern ADC_HandleTypeDef hadc;
 extern DMA_HandleTypeDef hdma_adc;
-extern CAN_HandleTypeDef hcan;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 
@@ -30,52 +30,129 @@ extern TIM_HandleTypeDef htim17;
 //********** Globals **********/
 // Define the device settings
 
-// @H'OC All devices will look like this one in terms of Macros
-static PDM_Device_t test_device_1 =
+static PDM_Device_t HCM1_d =
 {
-        .num_restart_attempts    = DEVICE_ONE_RESRART_ATTEMPTS,
-        .channel_restart_timeout = DEVICE_ONE_RESTART_TIMEOUT,
+        .num_restart_attempts    = HCM1_RESRART_ATTEMPTS,
+        .channel_restart_timeout = HCM1_RESTART_TIMEOUT,
         .channel_integral        = 0,
         .restart_timeout_ref     = 0,
-        .gpio_control_pin        = DEVICE_ONE_GPIO_PIN,
-        .channel_setpoint        = DEVICE_ONE_SETPOINT,
-        .max_channel_integral    = DEVICE_ONE_MAX_CHANNEL_INTEGRAL,
-        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO, (one for now for testing purposes)
-        .channel_resistor_val    = DEVICE_ONE_RESISTOR_VALUE,
-        .state                   = DEVICE_ONE_INITIAL_STATE,
-        .device_name             = CHANNEL_1_DEVICE
+        .gpio_control_pin        = HCM1_GPIO_PIN,
+        .channel_setpoint        = HCM1_SETPOINT,
+        .max_channel_integral    = HCM1_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_resistor_val    = HCM1_RESISTOR_VALUE,
+        .state                   = HCM1_INITIAL_STATE,
+        .device_name             = HCM1
 };
 
-static PDM_Device_t test_device_2 =
+static PDM_Device_t LCM2_d =
 {
-        .num_restart_attempts    = 10,
-        .channel_restart_timeout = DEFAULT_DEVICE_RESTART_TIMEOUT_MS,
+        .num_restart_attempts    = LCM2_RESRART_ATTEMPTS,
+        .channel_restart_timeout = LCM2_RESTART_TIMEOUT,
         .channel_integral        = 0,
         .restart_timeout_ref     = 0,
-        .gpio_control_pin        = GPIO_PIN_4,
-        .channel_setpoint        = 10,
-        .max_channel_integral    = 50,
-        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
-        .channel_resistor_val    = DEVICE_TWO_RESISTOR_VALUE,
-        .state                   = NORMAL,
-        .device_name             = CHANNEL_2_DEVICE
+        .gpio_control_pin        = LCM2_GPIO_PIN,
+        .channel_setpoint        = LCM2_SETPOINT,
+        .max_channel_integral    = LCM2_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS443P_IL_IS_RATIO,
+        .channel_resistor_val    = LCM2_RESISTOR_VALUE,
+        .state                   = LCM2_INITIAL_STATE,
+        .device_name             = LCM2
 };
 
-static PDM_Device_t test_device_3 =
+static PDM_Device_t LCM3_d =
 {
-        .num_restart_attempts    = 10,
-        .channel_restart_timeout = DEFAULT_DEVICE_RESTART_TIMEOUT_MS,
+        .num_restart_attempts    = LCM3_RESRART_ATTEMPTS,
+        .channel_restart_timeout = LCM3_RESTART_TIMEOUT,
         .channel_integral        = 0,
         .restart_timeout_ref     = 0,
-        .gpio_control_pin        = GPIO_PIN_5,
-        .channel_setpoint        = 10,
-        .max_channel_integral    = 50,
-        .device_fet_IL_IS_ratio  = 1,//BTS50085_IL_IS_RATIO,
-        .channel_resistor_val    = DEVICE_FOUR_RESISTOR_VALUE,
-        .state                   = NORMAL,
-        .device_name             = CHANNEL_4_DEVCIE
+        .gpio_control_pin        = LCM3_GPIO_PIN,
+        .channel_setpoint        = LCM3_SETPOINT,
+        .max_channel_integral    = LCM3_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS443P_IL_IS_RATIO,
+        .channel_resistor_val    = LCM3_RESISTOR_VALUE,
+        .state                   = LCM3_INITIAL_STATE,
+        .device_name             = LCM3
 };
 
+static PDM_Device_t LCM1_d =
+{
+        .num_restart_attempts    = LCM1_RESRART_ATTEMPTS,
+        .channel_restart_timeout = LCM1_RESTART_TIMEOUT,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = LCM1_GPIO_PIN,
+        .channel_setpoint        = LCM1_SETPOINT,
+        .max_channel_integral    = LCM1_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS443P_IL_IS_RATIO,
+        .channel_resistor_val    = LCM1_RESISTOR_VALUE,
+        .state                   = LCM1_INITIAL_STATE,
+        .device_name             = LCM1
+};
+static PDM_Device_t HCM3_d =
+{
+        .num_restart_attempts    = HCM3_RESRART_ATTEMPTS,
+        .channel_restart_timeout = HCM3_RESTART_TIMEOUT,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = HCM3_GPIO_PIN,
+        .channel_setpoint        = HCM3_SETPOINT,
+        .max_channel_integral    = HCM3_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_resistor_val    = HCM3_RESISTOR_VALUE,
+        .state                   = HCM3_INITIAL_STATE,
+        .device_name             = HCM3
+};
+
+static PDM_Device_t HCM4_d =
+{
+        .num_restart_attempts    = HCM4_RESRART_ATTEMPTS,
+        .channel_restart_timeout = HCM4_RESTART_TIMEOUT,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = HCM4_GPIO_PIN,
+        .channel_setpoint        = HCM4_SETPOINT,
+        .max_channel_integral    = HCM4_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_resistor_val    = HCM4_RESISTOR_VALUE,
+        .state                   = HCM4_INITIAL_STATE,
+        .device_name             = HCM4
+};
+
+
+static PDM_Device_t HCM5_d =
+{
+        .num_restart_attempts    = HCM5_RESRART_ATTEMPTS,
+        .channel_restart_timeout = HCM5_RESTART_TIMEOUT,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = HCM5_GPIO_PIN,
+        .channel_setpoint        = HCM5_SETPOINT,
+        .max_channel_integral    = HCM5_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_resistor_val    = HCM5_RESISTOR_VALUE,
+        .state                   = HCM5_INITIAL_STATE,
+        .device_name             = HCM5
+};
+
+
+static PDM_Device_t HCM2_d =
+{
+        .num_restart_attempts    = HCM2_RESRART_ATTEMPTS,
+        .channel_restart_timeout = HCM2_RESTART_TIMEOUT,
+        .channel_integral        = 0,
+        .restart_timeout_ref     = 0,
+        .gpio_control_pin        = HCM2_GPIO_PIN,
+        .channel_setpoint        = HCM2_SETPOINT,
+        .max_channel_integral    = HCM2_MAX_CHANNEL_INTEGRAL,
+        .device_fet_IL_IS_ratio  = BTS50085_IL_IS_RATIO,
+        .channel_resistor_val    = HCM2_RESISTOR_VALUE,
+        .state                   = HCM2_INITIAL_STATE,
+        .device_name             = HCM2
+};
+
+static PDM_Device_t TEMP_d;
+static PDM_Device_t VBAT_d;
 
 
 static U8           conv_cplt_flag;
@@ -83,18 +160,46 @@ static U16          current_buffer[CURRENT_BUFFER_SIZE];
 static U16          averaged_buffer[NUM_ADC_CHANNELS];
 static PDM_Device_t pdm_devices[NUM_ADC_CHANNELS];
 
-/*
-Diagnostic vars for adc frequency
-static U64          total_time;
-static U64          num_interrupts;
-static U16          average_time_val;
-*/
-
 
 //********** Function Definitions **********/
-void Log_CAN_Messages(void) {
-    // TODO: Get and use CAN lib
+
+/*
+ * Args:
+ * PDM_Device_t* - which device param to update
+ * double val - value to update into the param
+ *
+ * Info:
+ * Updates the CAN parameter
+ */
+void update_can_param(PDM_Device_t* device, double val) {
+    switch(device->device_name) {
+        case HCM1:
+            HCM1_current.data = val;
+            break;
+        case LCM2:
+            LCM2_current.data = val;
+            break;
+        case LCM1:
+            LCM1_current.data = val;
+            break;
+        case LCM3:
+            LCM3_current.data = val;
+            break;
+        case HCM3:
+            HCM3_current.data = val;
+            break;
+        case HCM4:
+            HCM4_current.data = val;
+            break;
+        case HCM5:
+            HCM5_current.data = val;
+            break;
+        case HCM2:
+            HCM2_current.data = val;
+            break;
+    }
 }
+
 
 
 /*
@@ -110,9 +215,33 @@ void PDM_Init(void) {
 
     // MUST PUT DEVICES IN ORDER OF ADC CHANNEL NO. FROM LOWEST TO HIGHEST
     // so the current buffer value contains the correct value for each device
-    pdm_devices[0] = test_device_1;
-    pdm_devices[1] = test_device_2;
-    pdm_devices[2] = test_device_3;
+    pdm_devices[0] = HCM1_d;
+    pdm_devices[1] = LCM2_d;
+    pdm_devices[2] = LCM3_d;
+    pdm_devices[3] = LCM1_d;
+    pdm_devices[4] = HCM3_d;
+    pdm_devices[5] = HCM4_d;
+    pdm_devices[6] = HCM5_d;
+    pdm_devices[7] = HCM2_d;
+    pdm_devices[8] = TEMP_d;
+    pdm_devices[9] = VBAT_d;
+
+
+    //CAN init
+    init_can(PDM_CAN_ID);
+    HCM1_current.update_enabled = TRUE;
+    LCM2_current.update_enabled = TRUE;
+    LCM3_current.update_enabled = TRUE;
+    LCM1_current.update_enabled = TRUE;
+    HCM3_current.update_enabled = TRUE;
+    HCM4_current.update_enabled = TRUE;
+    HCM5_current.update_enabled = TRUE;
+    HCM2_current.update_enabled = TRUE;
+    BAT_voltage.update_enabled = TRUE;
+    TEMP_sensor.update_enabled = TRUE;
+    Total_power.update_enabled = TRUE;
+
+
 
     // Unsure about this auto calibration
     HAL_ADCEx_Calibration_Start(&hadc);		// start cal before starting adc
@@ -130,9 +259,7 @@ void PDM_Init(void) {
         if (device->state == NORMAL) {
             HAL_GPIO_WritePin(GPIO_CONTROL_PORT, device->gpio_control_pin, GPIO_PIN_SET);
         }
-
     }
-
 }
 
 
@@ -168,7 +295,7 @@ void Schedule_ADC(void) {
             // timestamp now so DMA doesnt restart timer on interrupt
             timer_val = htim16.Instance->CNT + (CURRENT_BUFFER_SIZE * ADC_US_PER_SAMPLE); // adjust for ADC conversion time
 
-
+            // current buffer caseted to U32 to please the compiler gods, DMA request size set to half word (U16)
             HAL_ADC_Start_DMA(&hadc, (uint32_t*) current_buffer, CURRENT_BUFFER_SIZE);
 
             // do math while ADC goes brrrrrr
@@ -176,9 +303,10 @@ void Schedule_ADC(void) {
             for (adc_val = temp_current_buffer, device = pdm_devices;
                                                 device < pdm_devices + NUM_ADC_CHANNELS; adc_val++, device++) {
                 // Skip calculation of integral for special devices
-                if (!(device->device_name == TEMP_SENSOR || device->device_name == SPECIAL_DEVICE)) {
+                if (!(device->device_name == TEMP || device->device_name == VBAT)) {
                     voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
                     load_current = ((voltage * device->device_fet_IL_IS_ratio) / device->channel_resistor_val) * MA_IN_A;
+                    update_can_param(device, load_current);
                     device->channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
 
                     if (device->channel_integral < 0) {
@@ -186,13 +314,6 @@ void Schedule_ADC(void) {
                     }
                 }
             }
-/*
-            Diagnostic code for adc frequency
-            num_interrupts++;
-            total_time += timer_val;
-            average_time_val = total_time / num_interrupts;
-
-*/
         }
     }
 }
@@ -218,11 +339,13 @@ void Current_Control_Loop(void) {
     // Infinite loop cycles through NUM_ADC_CHANNELS state machines, one for each channel
     while (1) {
         // special device handling code
-        if (device->device_name == TEMP_SENSOR) {
-            ;
+        if (device->device_name == TEMP) {
+            // TODO: use voltage divider conversion
+            TEMP_sensor.data =
         }
-        else if (device->device_name == SPECIAL_DEVICE)  {
-            ;
+        else if (device->device_name == VBAT) {
+            // TODO: use voltage divider conversion
+            BAT_voltage =
         }
         // Regular overcurrent handling
         else {
@@ -232,7 +355,7 @@ void Current_Control_Loop(void) {
 
                 case RESTART_OFF:
                     curr_time = htim17.Instance->CNT;
-                    time_ref = device->restart_timeout_ref; // assign to local so not looking up multiple times
+                    time_ref = device->restart_timeout_ref;
                     if (curr_time < time_ref) {
                         time_diff = (MAX_16b_TIMER_VALUE - time_ref) + curr_time;
                     } else {
@@ -269,14 +392,38 @@ void Current_Control_Loop(void) {
             }
         }
 
-        //Log_CAN_Messages();
-
         device++;
         if (device >= pdm_devices + NUM_ADC_CHANNELS) {
             device = pdm_devices;
         }
     }
         // Unreachable
+}
+
+/*
+ * Args:
+ * none
+ *
+ * Info:
+ * OS task that handles CAN tx
+ */
+void CAN_tx(void) {
+    while (1) {
+        service_can_tx_hardware();
+    }
+}
+
+/*
+ * Args:
+ * none
+ *
+ * Info:
+ * OS task that handles incoming CAN messages
+ */
+void CAN_rx(void) {
+    while (1) {
+        service_can_rx_buffer();
+    }
 }
 
 
@@ -294,11 +441,6 @@ void Current_Control_Loop(void) {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     U8   i;
     U16* current_ptr;
-
-    // Suspend tasks so OS doesnt interrupt
-    // Need to find out if the OS interrupt has higher priority than this ISR, dont think so though
-    // If this interrupt priorty is higher dont worry. if not, then some wacky stuff might happen
-    // vTaskSuspendAll();
 
     // reset timer
     htim16.Instance->CNT = 0;
@@ -326,6 +468,4 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *adc_handle) {
     }
 
     conv_cplt_flag = 1;
-
-    //xTaskResumeAll(); only call if vTaskSuspendAll() is called
 }

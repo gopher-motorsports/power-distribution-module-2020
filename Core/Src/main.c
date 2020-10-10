@@ -63,7 +63,7 @@ const osThreadAttr_t Channel_control_attributes = {
 osThreadId_t CAN_TX_taskHandle;
 const osThreadAttr_t CAN_TX_task_attributes = {
   .name = "CAN_TX_task",
-  .priority = (osPriority_t) osPriorityNormal,
+  .priority = (osPriority_t) osPriorityAboveNormal,
   .stack_size = 128 * 4
 };
 /* Definitions for ADC_scheduler */
@@ -71,6 +71,13 @@ osThreadId_t ADC_schedulerHandle;
 const osThreadAttr_t ADC_scheduler_attributes = {
   .name = "ADC_scheduler",
   .priority = (osPriority_t) osPriorityHigh,
+  .stack_size = 128 * 4
+};
+/* Definitions for CAN_rx_task */
+osThreadId_t CAN_rx_taskHandle;
+const osThreadAttr_t CAN_rx_task_attributes = {
+  .name = "CAN_rx_task",
+  .priority = (osPriority_t) osPriorityAboveNormal,
   .stack_size = 128 * 4
 };
 /* USER CODE BEGIN PV */
@@ -89,6 +96,7 @@ static void MX_TIM17_Init(void);
 void ADC_Channel_Control(void *argument);
 void CAN_TX(void *argument);
 void ADC_Schedule_loop(void *argument);
+void CAN_rx_start(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -170,6 +178,9 @@ int main(void)
 
   /* creation of ADC_scheduler */
   ADC_schedulerHandle = osThreadNew(ADC_Schedule_loop, NULL, &ADC_scheduler_attributes);
+
+  /* creation of CAN_rx_task */
+  CAN_rx_taskHandle = osThreadNew(CAN_rx_start, NULL, &CAN_rx_task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -529,8 +540,8 @@ void CAN_TX(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    //GO4 CAN TX TASK
-    vTaskDelay(10);
+      CAN_tx();
+      Error_Handler();
   }
   /* USER CODE END CAN_TX */
 }
@@ -552,6 +563,25 @@ void ADC_Schedule_loop(void *argument)
     Error_Handler();
   }
   /* USER CODE END ADC_Schedule_loop */
+}
+
+/* USER CODE BEGIN Header_CAN_rx_start */
+/**
+* @brief Function implementing the CAN_rx_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_CAN_rx_start */
+void CAN_rx_start(void *argument)
+{
+  /* USER CODE BEGIN CAN_rx_start */
+  /* Infinite loop */
+  for(;;)
+  {
+    CAN_rx();
+    Error_Handler();
+  }
+  /* USER CODE END CAN_rx_start */
 }
 
  /**

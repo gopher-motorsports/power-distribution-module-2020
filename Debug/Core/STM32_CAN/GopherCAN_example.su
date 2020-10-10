@@ -1,0 +1,7 @@
+GopherCAN_example.c:74:6:init	8	static
+GopherCAN_example.c:114:6:can_rx_loop	8	static
+GopherCAN_example.c:129:6:can_hardware_handling	8	static
+GopherCAN_example.c:138:6:background_loop	8	static
+GopherCAN_example.c:155:6:main_loop	16	static
+GopherCAN_example.c:221:6:change_led_state	24	static
+GopherCAN_example.c:235:6:testing_loop	24	static

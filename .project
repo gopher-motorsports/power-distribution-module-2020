@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ADCTest</name>
+	<name>PDM_2021_devboard_version</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -30,4 +30,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Core/C-Utils</name>
+			<type>2</type>
+			<location>C:/Users/ian/SAECode/c-libraries/C-Utils</location>
+		</link>
+		<link>
+			<name>Core/STM32_CAN</name>
+			<type>2</type>
+			<location>C:/Users/ian/SAECode/STM32_CAN</location>
+		</link>
+	</linkedResources>
 </projectDescription>

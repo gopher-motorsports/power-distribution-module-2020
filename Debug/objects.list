@@ -1,3 +1,7 @@
+"Core/C-Utils/base_types.o"
+"Core/C-Utils/ring_buffer.o"
+"Core/STM32_CAN/GopherCAN.o"
+"Core/STM32_CAN/GopherCAN_example.o"
 "Core/Src/GO4_PDM_2020.o"
 "Core/Src/freertos.o"
 "Core/Src/main.o"

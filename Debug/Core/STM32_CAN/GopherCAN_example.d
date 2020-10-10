@@ -1,4 +1,7 @@
-Core/Src/GO4_PDM_2020.o: ../Core/Src/GO4_PDM_2020.c ../Core/Inc/main.h \
+Core/STM32_CAN/GopherCAN_example.o: \
+ C:/Users/ian/SAECode/STM32_CAN/GopherCAN_example.c \
+ C:/Users/ian/SAECode/STM32_CAN/GopherCAN.h \
+ c:\users\ian\saecode\c-libraries\c-utils\base_types.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h \
  ../Core/Inc/stm32f0xx_hal_conf.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_rcc.h \
@@ -30,19 +33,11 @@ Core/Src/GO4_PDM_2020.o: ../Core/Src/GO4_PDM_2020.c ../Core/Inc/main.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_tim_ex.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart.h \
  ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- ../Core/Inc/FreeRTOSConfig.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/portmacro.h \
- ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
- ../Core/Inc/base_types.h ../Core/Inc/GO4_PDM_2020.h \
- ../Core/Inc/base_types.h
+ C:/Users/ian/SAECode/STM32_CAN/GopherCAN_example.h
 
-../Core/Inc/main.h:
+C:/Users/ian/SAECode/STM32_CAN/GopherCAN.h:
+
+c:\users\ian\saecode\c-libraries\c-utils\base_types.h:
 
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h:
 
@@ -106,26 +101,4 @@ Core/Src/GO4_PDM_2020.o: ../Core/Src/GO4_PDM_2020.c ../Core/Inc/main.h \
 
 ../Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_uart_ex.h:
 
-../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
-
-../Core/Inc/FreeRTOSConfig.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/portmacro.h:
-
-../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
-
-../Core/Inc/base_types.h:
-
-../Core/Inc/GO4_PDM_2020.h:
-
-../Core/Inc/base_types.h:
+C:/Users/ian/SAECode/STM32_CAN/GopherCAN_example.h:
