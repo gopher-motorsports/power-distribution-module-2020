@@ -161,6 +161,18 @@ static U16          averaged_buffer[NUM_ADC_CHANNELS];
 static PDM_Device_t pdm_devices[NUM_ADC_CHANNELS];
 
 
+//********** CAN Parameters **********/
+extern FLOAT_CAN_STRUCT HCM1_current;
+extern FLOAT_CAN_STRUCT LCM2_current;
+extern FLOAT_CAN_STRUCT LCM3_current;
+extern FLOAT_CAN_STRUCT LCM1_current;
+extern FLOAT_CAN_STRUCT HCM3_current;
+extern FLOAT_CAN_STRUCT HCM4_current;
+extern FLOAT_CAN_STRUCT HCM5_current;
+extern FLOAT_CAN_STRUCT HCM2_current;
+extern FLOAT_CAN_STRUCT BAT_voltage;
+extern FLOAT_CAN_STRUCT TEMP_sensor;
+
 //********** Function Definitions **********/
 
 /*
@@ -239,7 +251,7 @@ void PDM_Init(void) {
     HCM2_current.update_enabled = TRUE;
     BAT_voltage.update_enabled = TRUE;
     TEMP_sensor.update_enabled = TRUE;
-    Total_power.update_enabled = TRUE;
+
 
 
 
@@ -304,9 +316,11 @@ void Schedule_ADC(void) {
                                                 device < pdm_devices + NUM_ADC_CHANNELS; adc_val++, device++) {
                 // Skip calculation of integral for special devices
                 if (!(device->device_name == TEMP || device->device_name == VBAT)) {
-                    voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL;
+                    voltage = (ADC_REF_VOLTAGE * (*adc_val)) / MAX_12b_ADC_VAL; // V = IR
+                    // TODO: load current macro?
                     load_current = ((voltage * device->device_fet_IL_IS_ratio) / device->channel_resistor_val) * MA_IN_A;
                     update_can_param(device, load_current);
+
                     device->channel_integral += (load_current - device->channel_setpoint) *  (timer_val / US_IN_S);
 
                     if (device->channel_integral < 0) {
@@ -344,7 +358,7 @@ void Current_Control_Loop(void) {
             TEMP_sensor.data =
         }
         else if (device->device_name == VBAT) {
-            // TODO: use voltage divider conversion
+            // TODO: xuse voltage divider conversion
             BAT_voltage =
         }
         // Regular overcurrent handling
