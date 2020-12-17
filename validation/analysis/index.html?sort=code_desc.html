@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <title> - puncover</title>
+    
+</head>
+<body>
+    <div class="container" id="content">
+
+        <div class="page-header">
+            <nav class="navbar navbar-default" role="navigation">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="/">
+                    Puncover
+                  </a>
+                </div>
+              </div>
+            </nav>
+          
+
+        </div>
+
+        <div id="inner_content">
+        
+
+    <h2>Folders</h2>
+    
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th width="100%"><a href="http://localhost:5000/?sort=name_asc" class="sortable">Name</a></th>
+                <th>Remarks</th>
+                <th class="col_size"><a href="http://localhost:5000/?sort=code_asc" class="sortable sort_desc">Code</a></th>
+                <th class="col_size"><a href="http://localhost:5000/?sort=vars_desc" class="sortable">Static</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+            
+            <tr>
+                <td>
+                    <a href="/path/%3Cunknown%3E/?sort=code_desc" class="icon-folder">
+                        &nbsp;&lt;unknown&gt;
+                    </a>
+                </td>
+                <td></td>
+                <td class="col_size" style="background:linear-gradient(90deg, rgba(0,0,255,0.07) 74%, transparent 74%);">
+                    24<span class="secondary">,</span>988
+                </td>
+                <td class="col_size" style="background:linear-gradient(90deg, rgba(255, 0, 0, 0.07) 100%, transparent 100%);">
+                    7<span class="secondary">,</span>421
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <a href="/path/build/?sort=code_desc" class="icon-folder">
+                        &nbsp;build
+                    </a>
+                </td>
+                <td></td>
+                <td class="col_size" style="background:linear-gradient(90deg, rgba(0,0,255,0.07) 25%, transparent 25%);">
+                    8<span class="secondary">,</span>676
+                </td>
+                <td class="col_size" style="">
+                    
+                </td>
+            </tr>
+            
+            
+
+            
+            
+            
+            
+        </tbody>
+        <tfoot>
+            <tr>
+            <th colspan="2">&sum; over all
+                (2 folders,
+                 0 files)
+            </th>
+            <th class="col_size">33<span class="secondary">,</span>664</th>
+            <th class="col_size">7<span class="secondary">,</span>421</th>
+            </tr>
+        </tfoot>
+
+    </table>
+
+    <a class="btn btn-default" href="/all/">Show all symbols</a>
+    <a class="btn btn-default" href="/rack/">Analyze text snippet</a>
+
+
+
+        </div>
+    <div id="page-footer">
+        <hr>
+        
+            brought to you with &#128150;
+            by <a href="https://twitter.com/hbehrens">Heiko Behrens</a>
+            <span class="secondary">– MIT license, copyright &copy; 2014-2017</span>
+        
+    </div>
+    </div>
+</body>
+</html>

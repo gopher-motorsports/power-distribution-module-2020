@@ -1,0 +1,71 @@
+# Quick test to ensure commit has not broken the build.
+# Uploads build artifacts and landing page for other jobs.
+# Sends Slack notification.
+
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      working-directory: validation
+      run: docker-compose up build
+
+    - name: Archive list file
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.sha}}-list
+        path: Debug/ADCTest.list
+
+    - name: Archive map file
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.sha}}-map
+        path: Debug/ADCTest.map
+
+    - name: Archive elf file
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.sha}}-elf
+        path: Debug/ADCTest.elf
+
+    - name: Setup landing page
+      uses: cuchi/jinja2-action@v1.2.0
+      with:
+        template: validation/static/test.html
+        output_file: validation/static/test.html
+        variables: |
+          hash=${{github.sha}}
+
+    - name: Upload landing page to S3 bucket
+      if: ${{ always() }}
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read
+      env:
+        SOURCE_DIR: ./validation/static
+        DEST_DIR: ${{github.sha}}
+        AWS_REGION: 'us-east-1'
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    
+    - name: Send Slack notification
+      if: ${{ always() }}
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: firmware-validation
+        SLACK_COLOR: '#3278BD'
+        SLACK_ICON_EMOJI: zap
+        SLACK_FOOTER: Build passed. ${{ secrets.ARTIFACT_ROOT_URL }}/${{github.sha}}/test.html
+        SLACK_TITLE: Commit Message
+        SLACK_USERNAME: pdm-validation-bot
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

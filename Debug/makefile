@@ -46,8 +46,8 @@ PDM_2021_devboard_version.bin \
 all: PDM_2021_devboard_version.elf secondary-outputs
 
 # Tool invocations
-PDM_2021_devboard_version.elf: $(OBJS) $(USER_OBJS) C:\Users\ian\STM32CubeIDE\workspace_1.3.0\ADCTest\STM32F072RBTX_FLASH.ld
-	arm-none-eabi-gcc -o "PDM_2021_devboard_version.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Users\ian\STM32CubeIDE\workspace_1.3.0\ADCTest\STM32F072RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PDM_2021_devboard_version.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ADCTest.elf: $(OBJS) $(USER_OBJS) ../STM32F072RBTX_FLASH.ld
+	arm-none-eabi-gcc -o "ADCTest.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"../STM32F072RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADCTest.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

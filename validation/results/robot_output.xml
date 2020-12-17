@@ -1,0 +1,2131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 3.1 (Python 3.8.5 on linux)" generated="20201213 23:51:18.974" rpa="false">
+<suite id="s1" name="Test Suite" source="/opt/renode/tests/platforms/ACM-SIL.robot">
+<kw name="Setup" library="renode-keywords" type="setup">
+<msg timestamp="20201213 23:49:51.265" level="TRACE">Arguments: [  ]</msg>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>platform.system()</arg>
+<arg>modules=platform</arg>
+</arguments>
+<assign>
+<var>${SYSTEM}</var>
+</assign>
+<msg timestamp="20201213 23:49:51.266" level="TRACE">Arguments: [ 'platform.system()' | modules='platform' ]</msg>
+<msg timestamp="20201213 23:49:51.272" level="TRACE">Return: 'Linux'</msg>
+<msg timestamp="20201213 23:49:51.273" level="INFO">${SYSTEM} = Linux</msg>
+<status status="PASS" starttime="20201213 23:49:51.265" endtime="20201213 23:49:51.273"></status>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<doc>Sets variable based on the given condition.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG}</arg>
+<arg>Debug</arg>
+<arg>${CONFIGURATION}</arg>
+</arguments>
+<assign>
+<var>${CONFIGURATION}</var>
+</assign>
+<msg timestamp="20201213 23:49:51.273" level="TRACE">Arguments: [ 'not True and False' | 'Debug' | '${CONFIGURATION}' ]</msg>
+<msg timestamp="20201213 23:49:51.274" level="TRACE">Return: 'Release'</msg>
+<msg timestamp="20201213 23:49:51.274" level="INFO">${CONFIGURATION} = Release</msg>
+<status status="PASS" starttime="20201213 23:49:51.273" endtime="20201213 23:49:51.274"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>--robot-server-port</arg>
+<arg>${PORT_NUMBER}</arg>
+<arg>--hide-log</arg>
+</arguments>
+<assign>
+<var>@{PARAMS}</var>
+</assign>
+<msg timestamp="20201213 23:49:51.274" level="TRACE">Arguments: [ '--robot-server-port' | '9999' | '--hide-log' ]</msg>
+<msg timestamp="20201213 23:49:51.274" level="TRACE">Return: ['--robot-server-port', '9999', '--hide-log']</msg>
+<msg timestamp="20201213 23:49:51.274" level="INFO">@{PARAMS} = [ --robot-server-port | 9999 | --hide-log ]</msg>
+<status status="PASS" starttime="20201213 23:49:51.274" endtime="20201213 23:49:51.274"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${DISABLE_XWT}</arg>
+<arg>Insert Into List</arg>
+<arg>${PARAMS}</arg>
+<arg>0</arg>
+<arg>--disable-xwt</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.275" level="TRACE">Arguments: [ 'False' | 'Insert Into List' | '${PARAMS}' | '0' | '--disable-xwt' ]</msg>
+<msg timestamp="20201213 23:49:51.275" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.274" endtime="20201213 23:49:51.275"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER}</arg>
+<arg>File Should Exist</arg>
+<arg>${DIRECTORY}/${BINARY_NAME}</arg>
+<arg>msg=Robot Framework remote server binary not found (${DIRECTORY}/${BINARY_NAME}). Did you forget to build it in ${CONFIGURATION} configuration?</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.275" level="TRACE">Arguments: [ 'not True' | 'File Should Exist' | '${DIRECTORY}/${BINARY_NAME}' | 'msg=Robot Framework remote server binary not found (${DIRECTORY}/${BINARY_NAME}). Did you forget to build it in ${CONFIGURATION} configuration?' ]</msg>
+<msg timestamp="20201213 23:49:51.275" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.275" endtime="20201213 23:49:51.275"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows'</arg>
+<arg>Start Process</arg>
+<arg>mono</arg>
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.276" level="TRACE">Arguments: [ "not True and not False and not 'Linux' == 'Windows'" | 'Start Process' | 'mono' | '${BINARY_NAME}' | '@{PARAMS}' | 'cwd=${DIRECTORY}' ]</msg>
+<msg timestamp="20201213 23:49:51.276" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.275" endtime="20201213 23:49:51.276"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER} and not ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'</arg>
+<arg>Start Process</arg>
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+<arg>shell=true</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.276" level="TRACE">Arguments: [ "not True and not False and 'Linux' == 'Windows'" | 'Start Process' | '${BINARY_NAME}' | '@{PARAMS}' | 'cwd=${DIRECTORY}' | 'shell=true' ]</msg>
+<msg timestamp="20201213 23:49:51.277" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.276" endtime="20201213 23:49:51.277"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and not '${SYSTEM}' == 'Windows'</arg>
+<arg>Start Process</arg>
+<arg>mono</arg>
+<arg>--debug</arg>
+<arg>--debugger-agent\=transport\=dt_socket,address\=0.0.0.0:${SERVER_REMOTE_PORT},server\=y,suspend\=${SERVER_REMOTE_SUSPEND}</arg>
+<arg>${BINARY_NAME}</arg>
+<arg>@{PARAMS}</arg>
+<arg>cwd=${DIRECTORY}</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.277" level="TRACE">Arguments: [ "not True and False and not 'Linux' == 'Windows'" | 'Start Process' | 'mono' | '--debug' | '--debugger-agent\\=transport\\=dt_socket,address\\=0.0.0.0:${SERVER_REMOTE_PORT},server\\=y,suspend\\=${SERVER_REMOTE_SUSPEND}' | '${BINARY_NAME}' | '@{PARAMS}' | 'cwd=${DIRECTORY}' ]</msg>
+<msg timestamp="20201213 23:49:51.277" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.277" endtime="20201213 23:49:51.277"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not ${SKIP_RUNNING_SERVER} and ${SERVER_REMOTE_DEBUG} and '${SYSTEM}' == 'Windows'</arg>
+<arg>Fatal Error</arg>
+<arg>Windows doesn't support server remote debug option.</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.278" level="TRACE">Arguments: [ "not True and False and 'Linux' == 'Windows'" | 'Fatal Error' | "Windows doesn't support server remote debug option." ]</msg>
+<msg timestamp="20201213 23:49:51.278" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.277" endtime="20201213 23:49:51.278"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>not '${SYSTEM}' == 'Windows'</arg>
+<arg>Wait Until Keyword Succeeds</arg>
+<arg>60s</arg>
+<arg>1s</arg>
+<arg>Import Library</arg>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.278" level="TRACE">Arguments: [ "not 'Linux' == 'Windows'" | 'Wait Until Keyword Succeeds' | '60s' | '1s' | 'Import Library' | 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>60s</arg>
+<arg>1s</arg>
+<arg>Import Library</arg>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.278" level="TRACE">Arguments: [ '60s' | '1s' | 'Import Library' | 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+</arguments>
+<msg timestamp="20201213 23:49:51.279" level="TRACE">Arguments: [ 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<msg timestamp="20201213 23:49:52.291" level="FAIL">Getting keyword names from library 'Remote' failed: Calling dynamic method 'get_keyword_names' failed: Connecting remote server at http://127.0.0.1:9999/ failed: [Errno 111] Connection refused</msg>
+<msg timestamp="20201213 23:49:52.291" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:49:51.279" endtime="20201213 23:49:52.291"></status>
+</kw>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Remote</arg>
+<arg>http://127.0.0.1:${PORT_NUMBER}/</arg>
+</arguments>
+<msg timestamp="20201213 23:49:53.292" level="TRACE">Arguments: [ 'Remote' | 'http://127.0.0.1:${PORT_NUMBER}/' ]</msg>
+<msg timestamp="20201213 23:49:53.649" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:53.292" endtime="20201213 23:49:53.649"></status>
+</kw>
+<msg timestamp="20201213 23:49:53.649" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.278" endtime="20201213 23:49:53.649"></status>
+</kw>
+<msg timestamp="20201213 23:49:53.650" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.278" endtime="20201213 23:49:53.650"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${SYSTEM}' == 'Windows'</arg>
+<arg>Wait Until Keyword Succeeds</arg>
+<arg>60s</arg>
+<arg>1s</arg>
+<arg>Import Library</arg>
+<arg>Remote</arg>
+<arg>http://localhost:${PORT_NUMBER}/</arg>
+</arguments>
+<msg timestamp="20201213 23:49:53.650" level="TRACE">Arguments: [ "'Linux' == 'Windows'" | 'Wait Until Keyword Succeeds' | '60s' | '1s' | 'Import Library' | 'Remote' | 'http://localhost:${PORT_NUMBER}/' ]</msg>
+<msg timestamp="20201213 23:49:53.650" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:53.650" endtime="20201213 23:49:53.650"></status>
+</kw>
+<kw name="Set Default Uart Timeout" library="Remote">
+<arguments>
+<arg>${DEFAULT_UART_TIMEOUT}</arg>
+</arguments>
+<msg timestamp="20201213 23:49:53.651" level="TRACE">Arguments: [ '8' ]</msg>
+<msg timestamp="20201213 23:49:53.686" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:53.651" endtime="20201213 23:49:53.686"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:49:53.686" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:49:53.706" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:53.686" endtime="20201213 23:49:53.707"></status>
+</kw>
+<msg timestamp="20201213 23:49:53.707" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:51.265" endtime="20201213 23:49:53.707"></status>
+</kw>
+<kw name="Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:51:18.894" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword Unless" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments if ``condition`` is false.</doc>
+<arguments>
+<arg>${SKIP_RUNNING_SERVER}</arg>
+<arg>Stop Remote Server</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.894" level="TRACE">Arguments: [ 'True' | 'Stop Remote Server' ]</msg>
+<msg timestamp="20201213 23:51:18.894" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.894" endtime="20201213 23:51:18.895"></status>
+</kw>
+<kw name="Run Keyword Unless" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments if ``condition`` is false.</doc>
+<arguments>
+<arg>${SKIP_RUNNING_SERVER}</arg>
+<arg>Wait For Process</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.895" level="TRACE">Arguments: [ 'True' | 'Wait For Process' ]</msg>
+<msg timestamp="20201213 23:51:18.895" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.895" endtime="20201213 23:51:18.895"></status>
+</kw>
+<msg timestamp="20201213 23:51:18.896" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.893" endtime="20201213 23:51:18.896"></status>
+</kw>
+<test id="s1-t1" name="Create Machine">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:49:53.708" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:49:53.714" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:53.708" endtime="20201213 23:49:53.714"></status>
+</kw>
+<kw name="Add Files">
+<msg timestamp="20201213 23:49:53.715" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>include @peripherals/STM32F0GPIOPort.cs</arg>
+</arguments>
+<msg timestamp="20201213 23:49:53.715" level="TRACE">Arguments: [ 'include @peripherals/STM32F0GPIOPort.cs' ]</msg>
+<msg timestamp="20201213 23:49:54.860" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:53.715" endtime="20201213 23:49:54.860"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>include @peripherals/STM32F0Timer3.cs</arg>
+</arguments>
+<msg timestamp="20201213 23:49:54.861" level="TRACE">Arguments: [ 'include @peripherals/STM32F0Timer3.cs' ]</msg>
+<msg timestamp="20201213 23:49:55.973" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:54.861" endtime="20201213 23:49:55.973"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>include @peripherals/STM32F0Timer6.cs</arg>
+</arguments>
+<msg timestamp="20201213 23:49:55.974" level="TRACE">Arguments: [ 'include @peripherals/STM32F0Timer6.cs' ]</msg>
+<msg timestamp="20201213 23:49:57.079" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:55.974" endtime="20201213 23:49:57.079"></status>
+</kw>
+<msg timestamp="20201213 23:49:57.079" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:53.715" endtime="20201213 23:49:57.079"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:49:57.079" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:49:57.080" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:49:57.109" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:57.079" endtime="20201213 23:49:57.109"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:49:57.110" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:49:58.997" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:57.110" endtime="20201213 23:49:58.997"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:49:58.997" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:49:59.228" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:58.997" endtime="20201213 23:49:59.228"></status>
+</kw>
+<msg timestamp="20201213 23:49:59.228" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:57.079" endtime="20201213 23:49:59.228"></status>
+</kw>
+<kw name="Provides" library="Remote">
+<arguments>
+<arg>ACM</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.228" level="TRACE">Arguments: [ 'ACM' ]</msg>
+<msg timestamp="20201213 23:49:59.231" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.228" endtime="20201213 23:49:59.231"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:49:59.232" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.233" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.234" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:49:59.234" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.234" endtime="20201213 23:49:59.234"></status>
+</kw>
+<msg timestamp="20201213 23:49:59.234" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.232" endtime="20201213 23:49:59.234"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:49:59.235" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.235" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:49:59.237" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:49:59.237" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:49:59.238" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:49:59.235" endtime="20201213 23:49:59.238"></status>
+</kw>
+<msg timestamp="20201213 23:49:59.238" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:49:59.238" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:49:59.234" endtime="20201213 23:49:59.238"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.238" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:49:59.239" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.238" endtime="20201213 23:49:59.239"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:49:59.239" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:49:59.263" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.239" endtime="20201213 23:49:59.263"></status>
+</kw>
+<msg timestamp="20201213 23:49:59.263" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.231" endtime="20201213 23:49:59.264"></status>
+</kw>
+<tags>
+<tag>Meta tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:49:53.707" endtime="20201213 23:49:59.264" critical="yes"></status>
+</test>
+<test id="s1-t2" name="Check Rear Wing Startup Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:49:59.265" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:49:59.269" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.265" endtime="20201213 23:49:59.269"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:49:59.270" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.270" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:49:59.273" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.270" endtime="20201213 23:49:59.273"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.273" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:49:59.607" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.273" endtime="20201213 23:49:59.607"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.607" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:49:59.759" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.607" endtime="20201213 23:49:59.759"></status>
+</kw>
+<msg timestamp="20201213 23:49:59.759" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.270" endtime="20201213 23:49:59.759"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:49:59.759" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:49:59.881" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:49:59.759" endtime="20201213 23:49:59.881"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:49:59.881" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:50:09.881" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:50:09.882" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:49:59.881" endtime="20201213 23:50:09.882"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_1}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:50:09.882" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x34' ]</msg>
+<msg timestamp="20201213 23:50:09.917" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:50:09.918" level="INFO">${pwm} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:50:09.882" endtime="20201213 23:50:09.918"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:50:09.918" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:50:09.918" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:50:09.918" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:50:09.919" level="INFO">${pwm_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:50:09.918" endtime="20201213 23:50:09.919"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.919" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:50:09.919" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.919" endtime="20201213 23:50:09.919"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.920" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:50:09.921" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.920" endtime="20201213 23:50:09.921"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:50:09.921" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.922" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.923" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:50:09.923" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.923" endtime="20201213 23:50:09.923"></status>
+</kw>
+<msg timestamp="20201213 23:50:09.923" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.922" endtime="20201213 23:50:09.923"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:50:09.924" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.924" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:50:09.927" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:50:09.927" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:50:09.927" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:50:09.924" endtime="20201213 23:50:09.927"></status>
+</kw>
+<msg timestamp="20201213 23:50:09.927" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:50:09.927" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:50:09.923" endtime="20201213 23:50:09.928"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.928" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:50:09.929" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.928" endtime="20201213 23:50:09.929"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:50:09.929" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:09.940" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:09.929" endtime="20201213 23:50:09.940"></status>
+</kw>
+<msg timestamp="20201213 23:50:09.940" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.921" endtime="20201213 23:50:09.940"></status>
+</kw>
+<doc>Checks startup servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:49:59.264" endtime="20201213 23:50:09.940" critical="yes"></status>
+</test>
+<test id="s1-t3" name="Check Left Front Wing Startup Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:50:09.941" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:09.946" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:09.941" endtime="20201213 23:50:09.946"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:50:09.947" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.947" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:50:09.950" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:09.947" endtime="20201213 23:50:09.950"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:50:09.950" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:50:10.300" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:09.950" endtime="20201213 23:50:10.300"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:50:10.301" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:50:10.456" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:10.300" endtime="20201213 23:50:10.456"></status>
+</kw>
+<msg timestamp="20201213 23:50:10.456" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:09.946" endtime="20201213 23:50:10.457"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:50:10.457" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:10.563" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:10.457" endtime="20201213 23:50:10.563"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:10.564" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:50:20.566" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:50:20.566" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:10.563" endtime="20201213 23:50:20.566"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_2}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:50:20.567" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x38' ]</msg>
+<msg timestamp="20201213 23:50:20.572" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:50:20.573" level="INFO">${pwm} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:50:20.566" endtime="20201213 23:50:20.573"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:50:20.574" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:50:20.574" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:50:20.574" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:50:20.574" level="INFO">${pwm_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:50:20.573" endtime="20201213 23:50:20.574"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.575" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:50:20.575" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.574" endtime="20201213 23:50:20.575"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.575" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:50:20.576" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.575" endtime="20201213 23:50:20.576"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:50:20.577" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.577" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.578" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:50:20.578" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.578" endtime="20201213 23:50:20.578"></status>
+</kw>
+<msg timestamp="20201213 23:50:20.578" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.577" endtime="20201213 23:50:20.578"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:50:20.579" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.580" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:50:20.581" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:50:20.582" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:50:20.582" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:50:20.579" endtime="20201213 23:50:20.582"></status>
+</kw>
+<msg timestamp="20201213 23:50:20.582" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:50:20.582" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:50:20.579" endtime="20201213 23:50:20.582"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.583" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:50:20.583" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.582" endtime="20201213 23:50:20.583"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:50:20.583" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:20.593" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:20.583" endtime="20201213 23:50:20.593"></status>
+</kw>
+<msg timestamp="20201213 23:50:20.594" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.576" endtime="20201213 23:50:20.594"></status>
+</kw>
+<doc>Checks startup servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:50:09.940" endtime="20201213 23:50:20.594" critical="yes"></status>
+</test>
+<test id="s1-t4" name="Check Right Front Wing Startup Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:50:20.596" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:20.599" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:20.595" endtime="20201213 23:50:20.599"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:50:20.600" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.600" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:50:20.606" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:20.600" endtime="20201213 23:50:20.606"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:50:20.607" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:50:21.009" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:20.607" endtime="20201213 23:50:21.009"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:50:21.009" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:50:21.162" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:21.009" endtime="20201213 23:50:21.162"></status>
+</kw>
+<msg timestamp="20201213 23:50:21.162" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:20.599" endtime="20201213 23:50:21.163"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:50:21.163" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:21.267" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:21.163" endtime="20201213 23:50:21.267"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:21.268" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:50:31.268" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:50:31.268" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:21.267" endtime="20201213 23:50:31.268"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_3}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:50:31.269" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x3C' ]</msg>
+<msg timestamp="20201213 23:50:31.272" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:50:31.272" level="INFO">${pwm} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:50:31.268" endtime="20201213 23:50:31.272"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:50:31.273" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:50:31.273" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:50:31.273" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:50:31.273" level="INFO">${pwm_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:50:31.272" endtime="20201213 23:50:31.273"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.274" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:50:31.274" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.273" endtime="20201213 23:50:31.274"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.274" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:50:31.275" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.274" endtime="20201213 23:50:31.275"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:50:31.275" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.276" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.276" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:50:31.276" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.276" endtime="20201213 23:50:31.276"></status>
+</kw>
+<msg timestamp="20201213 23:50:31.276" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.275" endtime="20201213 23:50:31.277"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:50:31.277" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.277" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:50:31.279" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:50:31.279" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:50:31.279" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:50:31.277" endtime="20201213 23:50:31.279"></status>
+</kw>
+<msg timestamp="20201213 23:50:31.280" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:50:31.280" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:50:31.277" endtime="20201213 23:50:31.280"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.281" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:50:31.281" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.280" endtime="20201213 23:50:31.281"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:50:31.282" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:31.289" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.282" endtime="20201213 23:50:31.289"></status>
+</kw>
+<msg timestamp="20201213 23:50:31.289" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.275" endtime="20201213 23:50:31.290"></status>
+</kw>
+<doc>Checks startup servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:50:20.594" endtime="20201213 23:50:31.290" critical="yes"></status>
+</test>
+<test id="s1-t5" name="Check Rear Wing DRS Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:50:31.291" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:31.294" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.291" endtime="20201213 23:50:31.294"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:50:31.295" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.295" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:50:31.297" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.295" endtime="20201213 23:50:31.298"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.298" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:50:31.630" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.298" endtime="20201213 23:50:31.630"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.630" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:50:31.781" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.630" endtime="20201213 23:50:31.781"></status>
+</kw>
+<msg timestamp="20201213 23:50:31.781" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.295" endtime="20201213 23:50:31.781"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:50:31.781" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:31.884" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:31.781" endtime="20201213 23:50:31.884"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:31.885" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:50:41.885" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:50:41.885" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:31.885" endtime="20201213 23:50:41.885"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.gpioPortC.DRSButton Press</arg>
+</arguments>
+<msg timestamp="20201213 23:50:41.886" level="TRACE">Arguments: [ 'sysbus.gpioPortC.DRSButton Press' ]</msg>
+<msg timestamp="20201213 23:50:41.896" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:41.886" endtime="20201213 23:50:41.896"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:41.897" level="TRACE">Arguments: [ '1s' ]</msg>
+<msg timestamp="20201213 23:50:42.897" level="INFO">Slept 1 second</msg>
+<msg timestamp="20201213 23:50:42.897" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:41.897" endtime="20201213 23:50:42.897"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_1}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:50:42.898" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x34' ]</msg>
+<msg timestamp="20201213 23:50:42.902" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:50:42.902" level="INFO">${pwm} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:50:42.897" endtime="20201213 23:50:42.903"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:50:42.903" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:50:42.903" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:50:42.903" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:50:42.903" level="INFO">${pwm_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:50:42.903" endtime="20201213 23:50:42.903"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.904" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:50:42.904" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.903" endtime="20201213 23:50:42.904"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.905" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:50:42.905" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.904" endtime="20201213 23:50:42.905"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:50:42.905" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.906" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.906" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:50:42.906" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.906" endtime="20201213 23:50:42.906"></status>
+</kw>
+<msg timestamp="20201213 23:50:42.907" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.905" endtime="20201213 23:50:42.907"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:50:42.907" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.908" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:50:42.910" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:50:42.910" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:50:42.910" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:50:42.907" endtime="20201213 23:50:42.910"></status>
+</kw>
+<msg timestamp="20201213 23:50:42.910" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:50:42.911" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:50:42.907" endtime="20201213 23:50:42.911"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.912" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:50:42.913" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.912" endtime="20201213 23:50:42.913"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:50:42.914" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:42.922" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:42.913" endtime="20201213 23:50:42.923"></status>
+</kw>
+<msg timestamp="20201213 23:50:42.923" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.905" endtime="20201213 23:50:42.923"></status>
+</kw>
+<doc>Checks DRS servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:50:31.290" endtime="20201213 23:50:42.923" critical="yes"></status>
+</test>
+<test id="s1-t6" name="Check Left Front Wing DRS Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:50:42.924" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:42.927" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:42.924" endtime="20201213 23:50:42.927"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:50:42.927" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.928" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:50:42.930" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:42.928" endtime="20201213 23:50:42.930"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:50:42.930" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:50:43.282" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:42.930" endtime="20201213 23:50:43.282"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:50:43.282" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:50:43.434" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:43.282" endtime="20201213 23:50:43.434"></status>
+</kw>
+<msg timestamp="20201213 23:50:43.434" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:42.927" endtime="20201213 23:50:43.434"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:50:43.435" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:43.537" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:43.435" endtime="20201213 23:50:43.538"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:43.538" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:50:53.539" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:50:53.539" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:43.538" endtime="20201213 23:50:53.539"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.gpioPortC.DRSButton Press</arg>
+</arguments>
+<msg timestamp="20201213 23:50:53.539" level="TRACE">Arguments: [ 'sysbus.gpioPortC.DRSButton Press' ]</msg>
+<msg timestamp="20201213 23:50:53.543" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:53.539" endtime="20201213 23:50:53.544"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:53.544" level="TRACE">Arguments: [ '1s' ]</msg>
+<msg timestamp="20201213 23:50:54.544" level="INFO">Slept 1 second</msg>
+<msg timestamp="20201213 23:50:54.545" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:53.544" endtime="20201213 23:50:54.545"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_2}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:50:54.545" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x38' ]</msg>
+<msg timestamp="20201213 23:50:54.548" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:50:54.548" level="INFO">${pwm} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:50:54.545" endtime="20201213 23:50:54.549"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:50:54.549" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:50:54.549" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:50:54.549" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:50:54.549" level="INFO">${pwm_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:50:54.549" endtime="20201213 23:50:54.549"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.550" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:50:54.550" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.550" endtime="20201213 23:50:54.551"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.551" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:50:54.551" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.551" endtime="20201213 23:50:54.552"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:50:54.552" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.553" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.553" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:50:54.553" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.553" endtime="20201213 23:50:54.553"></status>
+</kw>
+<msg timestamp="20201213 23:50:54.554" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.552" endtime="20201213 23:50:54.554"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:50:54.554" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.555" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:50:54.557" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:50:54.557" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:50:54.557" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:50:54.555" endtime="20201213 23:50:54.557"></status>
+</kw>
+<msg timestamp="20201213 23:50:54.557" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:50:54.557" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:50:54.554" endtime="20201213 23:50:54.557"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.558" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:50:54.558" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.558" endtime="20201213 23:50:54.558"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:50:54.559" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:54.568" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:54.558" endtime="20201213 23:50:54.568"></status>
+</kw>
+<msg timestamp="20201213 23:50:54.568" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.552" endtime="20201213 23:50:54.568"></status>
+</kw>
+<doc>Checks DRS servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:50:42.923" endtime="20201213 23:50:54.568" critical="yes"></status>
+</test>
+<test id="s1-t7" name="Check Right Front Wing DRS Steady-State Value">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:50:54.570" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:54.574" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:54.569" endtime="20201213 23:50:54.575"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:50:54.575" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.575" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:50:54.578" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:54.575" endtime="20201213 23:50:54.578"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.578" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:50:54.932" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:54.578" endtime="20201213 23:50:54.932"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:50:54.932" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:50:55.073" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:54.932" endtime="20201213 23:50:55.073"></status>
+</kw>
+<msg timestamp="20201213 23:50:55.073" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:54.575" endtime="20201213 23:50:55.073"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:50:55.073" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:50:55.178" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:50:55.073" endtime="20201213 23:50:55.178"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:50:55.178" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:51:05.179" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:51:05.179" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:50:55.178" endtime="20201213 23:51:05.179"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.gpioPortC.DRSButton Press</arg>
+</arguments>
+<msg timestamp="20201213 23:51:05.179" level="TRACE">Arguments: [ 'sysbus.gpioPortC.DRSButton Press' ]</msg>
+<msg timestamp="20201213 23:51:05.182" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:05.179" endtime="20201213 23:51:05.182"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20201213 23:51:05.182" level="TRACE">Arguments: [ '1s' ]</msg>
+<msg timestamp="20201213 23:51:06.182" level="INFO">Slept 1 second</msg>
+<msg timestamp="20201213 23:51:06.183" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:05.182" endtime="20201213 23:51:06.183"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_3}</arg>
+</arguments>
+<assign>
+<var>${pwm}</var>
+</assign>
+<msg timestamp="20201213 23:51:06.183" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x3C' ]</msg>
+<msg timestamp="20201213 23:51:06.187" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:51:06.188" level="INFO">${pwm} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:06.183" endtime="20201213 23:51:06.188"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm}</arg>
+</arguments>
+<assign>
+<var>${pwm_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:06.188" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:51:06.189" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:06.189" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:51:06.189" level="INFO">${pwm_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:51:06.188" endtime="20201213 23:51:06.189"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.189" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:51:06.189" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.189" endtime="20201213 23:51:06.190"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.190" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:51:06.190" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.190" endtime="20201213 23:51:06.190"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:51:06.191" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.191" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.191" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:51:06.191" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.191" endtime="20201213 23:51:06.191"></status>
+</kw>
+<msg timestamp="20201213 23:51:06.192" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.191" endtime="20201213 23:51:06.192"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:51:06.192" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.192" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:51:06.194" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:51:06.194" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:51:06.194" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:51:06.192" endtime="20201213 23:51:06.194"></status>
+</kw>
+<msg timestamp="20201213 23:51:06.194" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:51:06.194" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:51:06.192" endtime="20201213 23:51:06.194"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.195" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:51:06.196" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.195" endtime="20201213 23:51:06.196"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:51:06.196" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:51:06.203" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.196" endtime="20201213 23:51:06.203"></status>
+</kw>
+<msg timestamp="20201213 23:51:06.204" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.190" endtime="20201213 23:51:06.204"></status>
+</kw>
+<doc>Checks DRS servo position</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:50:54.569" endtime="20201213 23:51:06.204" critical="yes"></status>
+</test>
+<test id="s1-t8" name="Check DRS Deployment And Release">
+<kw name="Reset Emulation" library="Remote" type="setup">
+<msg timestamp="20201213 23:51:06.205" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:51:06.209" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.205" endtime="20201213 23:51:06.209"></status>
+</kw>
+<kw name="Create Target">
+<msg timestamp="20201213 23:51:06.210" level="TRACE">Arguments: [  ]</msg>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>mach create</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.210" level="TRACE">Arguments: [ 'mach create' ]</msg>
+<msg timestamp="20201213 23:51:06.213" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.210" endtime="20201213 23:51:06.213"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.214" level="TRACE">Arguments: [ 'machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl' ]</msg>
+<msg timestamp="20201213 23:51:06.559" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.213" endtime="20201213 23:51:06.560"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus LoadELF @code/RTOS_DRS.elf</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.560" level="TRACE">Arguments: [ 'sysbus LoadELF @code/RTOS_DRS.elf' ]</msg>
+<msg timestamp="20201213 23:51:06.715" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.560" endtime="20201213 23:51:06.715"></status>
+</kw>
+<msg timestamp="20201213 23:51:06.715" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.210" endtime="20201213 23:51:06.715"></status>
+</kw>
+<kw name="Start Emulation" library="Remote">
+<msg timestamp="20201213 23:51:06.716" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:51:06.819" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:06.716" endtime="20201213 23:51:06.819"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>${STARTUP_TIME}s</arg>
+</arguments>
+<msg timestamp="20201213 23:51:06.819" level="TRACE">Arguments: [ '10s' ]</msg>
+<msg timestamp="20201213 23:51:16.820" level="INFO">Slept 10 seconds</msg>
+<msg timestamp="20201213 23:51:16.820" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:06.819" endtime="20201213 23:51:16.820"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.gpioPortC.DRSButton Press</arg>
+</arguments>
+<msg timestamp="20201213 23:51:16.820" level="TRACE">Arguments: [ 'sysbus.gpioPortC.DRSButton Press' ]</msg>
+<msg timestamp="20201213 23:51:16.825" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:16.820" endtime="20201213 23:51:16.825"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20201213 23:51:16.826" level="TRACE">Arguments: [ '1s' ]</msg>
+<msg timestamp="20201213 23:51:17.826" level="INFO">Slept 1 second</msg>
+<msg timestamp="20201213 23:51:17.826" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:16.825" endtime="20201213 23:51:17.826"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_1}</arg>
+</arguments>
+<assign>
+<var>${pwm1}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.827" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x34' ]</msg>
+<msg timestamp="20201213 23:51:17.832" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:51:17.832" level="INFO">${pwm1} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:17.826" endtime="20201213 23:51:17.832"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_2}</arg>
+</arguments>
+<assign>
+<var>${pwm2}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.832" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x38' ]</msg>
+<msg timestamp="20201213 23:51:17.835" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:51:17.835" level="INFO">${pwm2} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:17.832" endtime="20201213 23:51:17.835"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_3}</arg>
+</arguments>
+<assign>
+<var>${pwm3}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.835" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x3C' ]</msg>
+<msg timestamp="20201213 23:51:17.841" level="TRACE">Return: '0x000006A4\n\n'</msg>
+<msg timestamp="20201213 23:51:17.841" level="INFO">${pwm3} = 0x000006A4
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:17.835" endtime="20201213 23:51:17.841"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm1}</arg>
+</arguments>
+<assign>
+<var>${pwm1_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.841" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:51:17.842" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:17.842" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:51:17.842" level="INFO">${pwm1_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:51:17.841" endtime="20201213 23:51:17.842"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm2}</arg>
+</arguments>
+<assign>
+<var>${pwm2_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.842" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:51:17.843" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:17.843" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:51:17.843" level="INFO">${pwm2_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:51:17.842" endtime="20201213 23:51:17.843"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm3}</arg>
+</arguments>
+<assign>
+<var>${pwm3_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:17.844" level="TRACE">Arguments: [ '0x000006A4\n\n' ]</msg>
+<msg timestamp="20201213 23:51:17.844" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:17.844" level="TRACE">Return: 1700.0</msg>
+<msg timestamp="20201213 23:51:17.845" level="INFO">${pwm3_clean} = 1700.0</msg>
+<status status="PASS" starttime="20201213 23:51:17.844" endtime="20201213 23:51:17.845"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm1_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.845" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:51:17.846" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.845" endtime="20201213 23:51:17.846"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm1_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.846" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:51:17.847" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.846" endtime="20201213 23:51:17.847"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm2_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.847" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:51:17.848" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.847" endtime="20201213 23:51:17.848"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm2_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.848" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:51:17.849" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.848" endtime="20201213 23:51:17.849"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm3_clean} &gt; ${WING_DRS_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.850" level="TRACE">Arguments: [ '1700.0 &gt; 1684' ]</msg>
+<msg timestamp="20201213 23:51:17.850" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.849" endtime="20201213 23:51:17.850"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm3_clean} &lt; ${WING_DRS_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.851" level="TRACE">Arguments: [ '1700.0 &lt; 1716' ]</msg>
+<msg timestamp="20201213 23:51:17.851" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.850" endtime="20201213 23:51:17.851"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.gpioPortC.DRSButton Release</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.851" level="TRACE">Arguments: [ 'sysbus.gpioPortC.DRSButton Release' ]</msg>
+<msg timestamp="20201213 23:51:17.855" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:17.851" endtime="20201213 23:51:17.855"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1s</arg>
+</arguments>
+<msg timestamp="20201213 23:51:17.856" level="TRACE">Arguments: [ '1s' ]</msg>
+<msg timestamp="20201213 23:51:18.856" level="INFO">Slept 1 second</msg>
+<msg timestamp="20201213 23:51:18.856" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:17.855" endtime="20201213 23:51:18.856"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_1}</arg>
+</arguments>
+<assign>
+<var>${pwm1}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.857" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x34' ]</msg>
+<msg timestamp="20201213 23:51:18.859" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:51:18.859" level="INFO">${pwm1} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:18.856" endtime="20201213 23:51:18.860"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_2}</arg>
+</arguments>
+<assign>
+<var>${pwm2}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.860" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x38' ]</msg>
+<msg timestamp="20201213 23:51:18.862" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:51:18.863" level="INFO">${pwm2} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:18.860" endtime="20201213 23:51:18.863"></status>
+</kw>
+<kw name="Execute Command" library="Remote">
+<arguments>
+<arg>sysbus.timer3 ReadDoubleWord ${TIMER_3_COMPARE_3}</arg>
+</arguments>
+<assign>
+<var>${pwm3}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.863" level="TRACE">Arguments: [ 'sysbus.timer3 ReadDoubleWord 0x3C' ]</msg>
+<msg timestamp="20201213 23:51:18.867" level="TRACE">Return: '0x00001434\n\n'</msg>
+<msg timestamp="20201213 23:51:18.867" level="INFO">${pwm3} = 0x00001434
+
+</msg>
+<status status="PASS" starttime="20201213 23:51:18.863" endtime="20201213 23:51:18.867"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm1}</arg>
+</arguments>
+<assign>
+<var>${pwm1_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.867" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:51:18.868" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:18.868" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:51:18.868" level="INFO">${pwm1_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:51:18.867" endtime="20201213 23:51:18.868"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm2}</arg>
+</arguments>
+<assign>
+<var>${pwm2_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.868" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:51:18.868" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:18.868" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:51:18.868" level="INFO">${pwm2_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:51:18.868" endtime="20201213 23:51:18.868"></status>
+</kw>
+<kw name="Convert To Number" library="BuiltIn">
+<doc>Converts the given item to a floating point number.</doc>
+<arguments>
+<arg>${pwm3}</arg>
+</arguments>
+<assign>
+<var>${pwm3_clean}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.869" level="TRACE">Arguments: [ '0x00001434\n\n' ]</msg>
+<msg timestamp="20201213 23:51:18.869" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20201213 23:51:18.869" level="TRACE">Return: 5172.0</msg>
+<msg timestamp="20201213 23:51:18.869" level="INFO">${pwm3_clean} = 5172.0</msg>
+<status status="PASS" starttime="20201213 23:51:18.869" endtime="20201213 23:51:18.869"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm1_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.869" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:51:18.870" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.869" endtime="20201213 23:51:18.870"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm1_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.871" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:51:18.871" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.870" endtime="20201213 23:51:18.871"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm2_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.872" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:51:18.872" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.871" endtime="20201213 23:51:18.872"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm2_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.873" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:51:18.873" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.872" endtime="20201213 23:51:18.873"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm3_clean} &gt; ${WING_START_VALUE_MIN}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.873" level="TRACE">Arguments: [ '5172.0 &gt; 5156' ]</msg>
+<msg timestamp="20201213 23:51:18.874" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.873" endtime="20201213 23:51:18.874"></status>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${pwm3_clean} &lt; ${WING_START_VALUE_MAX}</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.875" level="TRACE">Arguments: [ '5172.0 &lt; 5188' ]</msg>
+<msg timestamp="20201213 23:51:18.875" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.874" endtime="20201213 23:51:18.875"></status>
+</kw>
+<kw name="Test Teardown" library="renode-keywords" type="teardown">
+<msg timestamp="20201213 23:51:18.876" level="TRACE">Arguments: [  ]</msg>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${CREATE_SNAPSHOT_ON_FAIL}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.876" level="TRACE">Arguments: [ 'True' | 'Run Keyword If Test Failed' | 'Create Snapshot Of Failed Test' ]</msg>
+<kw name="Run Keyword If Test Failed" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if the test failed.</doc>
+<arguments>
+<arg>Create Snapshot Of Failed Test</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.877" level="TRACE">Arguments: [ 'Create Snapshot Of Failed Test' ]</msg>
+<msg timestamp="20201213 23:51:18.877" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.877" endtime="20201213 23:51:18.877"></status>
+</kw>
+<msg timestamp="20201213 23:51:18.877" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.876" endtime="20201213 23:51:18.878"></status>
+</kw>
+<kw name="Run Keyword And Ignore Error" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<arguments>
+<arg>Import Library</arg>
+<arg>Dialogs</arg>
+</arguments>
+<assign>
+<var>${res}</var>
+</assign>
+<msg timestamp="20201213 23:51:18.878" level="TRACE">Arguments: [ 'Import Library' | 'Dialogs' ]</msg>
+<kw name="Import Library" library="BuiltIn">
+<doc>Imports a library with the given name and optional arguments.</doc>
+<arguments>
+<arg>Dialogs</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.878" level="TRACE">Arguments: [ 'Dialogs' ]</msg>
+<msg timestamp="20201213 23:51:18.880" level="TRACE">Return: None</msg>
+<msg timestamp="20201213 23:51:18.880" level="FAIL">Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  /opt/renode/tests
+  /usr/lib/python38.zip
+  /usr/lib/python3.8
+  /usr/lib/python3.8/lib-dynload
+  /usr/local/lib/python3.8/dist-packages
+  /usr/lib/python3/dist-packages</msg>
+<msg timestamp="20201213 23:51:18.880" level="DEBUG">Traceback (most recent call last):
+  None</msg>
+<status status="FAIL" starttime="20201213 23:51:18.878" endtime="20201213 23:51:18.880"></status>
+</kw>
+<msg timestamp="20201213 23:51:18.880" level="TRACE">Return: ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/lib/python38.zip\n  /usr/lib/python3.8\n  /usr/lib/python3.8/lib-dynload\n  /usr/local/lib/python3.8/dist-packages\n  /usr/lib/python3/dist-packages")</msg>
+<msg timestamp="20201213 23:51:18.880" level="INFO">${res} = ('FAIL', "Importing test library 'robot.libraries.Dialogs' failed: ModuleNotFoundError: No module named 'tkinter'\nTraceback (most recent call last):\n  None\nPYTHONPATH:\n  /opt/renode/tests\n  /usr/...</msg>
+<status status="PASS" starttime="20201213 23:51:18.878" endtime="20201213 23:51:18.881"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${HOLD_ON_ERROR}</arg>
+<arg>Run Keyword If Test Failed</arg>
+<arg>Run Keywords</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>Couldn't load the Dialogs library - interactive debugging is not possible</arg>
+<arg>console=True</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Open GUI</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Pause Execution</arg>
+<arg>Test failed. Press OK once done debugging.</arg>
+<arg>AND</arg>
+<arg>Run Keyword If</arg>
+<arg>'${res[0]}' != 'FAIL'</arg>
+<arg>Close GUI</arg>
+</arguments>
+<msg timestamp="20201213 23:51:18.881" level="TRACE">Arguments: [ 'False' | 'Run Keyword If Test Failed' | 'Run Keywords' | 'Run Keyword If' | "'${res[0]}' == 'FAIL'" | 'Log' | "Couldn't load the Dialogs library - interactive debugging is not possible" | 'console=True' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Open GUI' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Pause Execution' | 'Test failed. Press OK once done debugging.' | 'AND' | 'Run Keyword If' | "'${res[0]}' != 'FAIL'" | 'Close GUI' ]</msg>
+<msg timestamp="20201213 23:51:18.881" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.881" endtime="20201213 23:51:18.882"></status>
+</kw>
+<kw name="Reset Emulation" library="Remote">
+<msg timestamp="20201213 23:51:18.882" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20201213 23:51:18.891" level="TRACE">Return: ''</msg>
+<status status="PASS" starttime="20201213 23:51:18.882" endtime="20201213 23:51:18.891"></status>
+</kw>
+<msg timestamp="20201213 23:51:18.891" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20201213 23:51:18.875" endtime="20201213 23:51:18.891"></status>
+</kw>
+<doc>Checks DRS deployment</doc>
+<tags>
+<tag>Servo control tests</tag>
+</tags>
+<status status="PASS" starttime="20201213 23:51:06.204" endtime="20201213 23:51:18.891" critical="yes"></status>
+</test>
+<metadata>
+<item name="HotSpot_Action">-</item>
+</metadata>
+<status status="PASS" starttime="20201213 23:49:51.197" endtime="20201213 23:51:18.896"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="8" fail="0">Critical Tests</stat>
+<stat pass="8" fail="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0">Meta tests</stat>
+<stat pass="7" fail="0">Servo control tests</stat>
+</tag>
+<suite>
+<stat pass="8" fail="0" id="s1" name="Test Suite">Test Suite</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

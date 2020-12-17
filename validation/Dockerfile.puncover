@@ -1,0 +1,11 @@
+FROM python:3
+RUN apt update
+RUN apt install -y git
+RUN apt install gcc-arm-none-eabi -y
+RUN git clone https://github.com/memfault/puncover.git
+RUN cd puncover
+WORKDIR puncover
+RUN ./setup.py build
+RUN ./setup.py install
+#CMD puncover --elf_file /code/Debug/renode-test.elf --src_root /code/ --build_dir /code/Debug/ & wget --recursive --html-extension --page-requisites --convert-links localhost:5000 -nH -q
+#CMD tail -F anything

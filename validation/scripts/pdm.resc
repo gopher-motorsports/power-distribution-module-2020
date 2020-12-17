@@ -1,0 +1,15 @@
+include @peripherals/STM32F0GPIOPort.cs
+include @peripherals/STM32F0Timer3.cs
+include @peripherals/STM32F0Timer6.cs
+
+mach create
+machine LoadPlatformDescription @platforms/boards/acm_pcba_v1.0.repl
+
+$bin?=@../Debug/ADCTest.elf
+
+macro reset
+"""
+    sysbus LoadELF $bin
+"""
+
+runMacro $reset

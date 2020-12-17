@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  val:
+    container_name: test_validation
+    image: antmicro/renode
+    volumes: 
+      - ./scripts:/opt/renode/scripts
+      - ./peripherals:/opt/renode/peripherals
+      - ./tests:/opt/renode/tests/platforms
+      - ./tests/tests.yaml:/opt/renode/tests/tests.yaml
+      - ./platforms:/opt/renode/platforms
+      - ../Debug:/opt/renode/code
+      - ./lib:/opt/renode/lib
+      - ./results:/opt/renode/tests/test_results
+    # command: tail -F anything
+    working_dir: /opt/renode/tests
+    command: /opt/renode/tests/test.sh -t /opt/renode/tests/platforms/tests.yaml -r /opt/renode/tests/test_results
+
+  puncover:
+    container_name: test_puncover
+    image: gophermotorsports/puncover:test-v1
+    volumes: 
+      - ./analysis:/puncover/
+      - ../:/code/
+    command: bash -c "puncover --elf_file /code/Debug/ADCTest.elf --src_root /code/ --build_dir /code/Debug/ & wget --recursive --html-extension --page-requisites --convert-links localhost:5000 -nH -q"
+
+  build:
+    container_name: test_build
+    image: gophermotorsports/build:latest
+    volumes: 
+      - ../:/code/
+    command: make all -C /code/Debug
