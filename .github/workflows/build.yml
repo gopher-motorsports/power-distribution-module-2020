@@ -17,7 +17,7 @@ jobs:
 
     - name: Build
       working-directory: validation
-      run: docker-compose up build
+      run: docker-compose up --exit-code-from build build
 
     - name: Archive list file
       uses: actions/upload-artifact@v2
