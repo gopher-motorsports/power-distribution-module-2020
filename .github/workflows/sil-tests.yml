@@ -1,0 +1,43 @@
+# Builds and executes SIL tests using renode emulator.
+# Archives and uploads results
+
+name: SIL Tests
+
+on:
+  push:
+
+jobs:      
+  test:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build
+      working-directory: validation
+      run: docker-compose up --exit-code-from build build
+
+    - name: Run tests
+      working-directory: validation
+      run: docker-compose up --exit-code-from val val
+      
+    - name: Archive test results
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{github.sha}}-test-results
+        path: validation/results
+        
+    - name: Upload results to S3 bucket
+      if: ${{ always() }}
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read
+      env:
+        SOURCE_DIR: ./validation/results
+        DEST_DIR: ${{github.sha}}
+        AWS_REGION: 'us-east-1'
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

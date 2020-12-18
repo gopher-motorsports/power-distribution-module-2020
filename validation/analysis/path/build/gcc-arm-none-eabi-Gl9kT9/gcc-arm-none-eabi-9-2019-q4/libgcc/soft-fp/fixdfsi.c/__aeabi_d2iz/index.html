@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <title>Symbol - puncover</title>
+    
+</head>
+<body>
+    <div class="container" id="content">
+
+        <div class="page-header">
+            <nav class="navbar navbar-default" role="navigation">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                  <a class="navbar-brand" href="/">
+                    Puncover
+                  </a>
+                </div>
+              </div>
+            </nav>
+          
+
+        </div>
+
+        <div id="inner_content">
+        
+    
+    <ol class="breadcrumb folders">
+        
+        <li><a href="/path/build/">build</a></li>
+        
+        <li><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/">gcc-arm-none-eabi-Gl9kT9</a></li>
+        
+        <li><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/">gcc-arm-none-eabi-9-2019-q4</a></li>
+        
+        <li><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/">libgcc</a></li>
+        
+        <li ><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/">soft-fp</a>
+            </li>
+
+        
+        <li class="active"><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/">fixdfsi.c</a>:35
+            </li>
+        
+    </ol>
+
+
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>Function</th>
+                <td colspan="5">
+                    <span class="icon-function">__aeabi_d2iz</span>
+                </td>
+            </tr>
+
+            <tr>
+                <th rowspan="2"></th>
+                <th>Address</th>
+                <th>Remarks</th>
+                <th>Stack</th>
+                <th>Code</th>
+                <th>Static</th>
+            </tr>
+            <tr>
+                <td>0x080022d8</td>
+                <td>
+    <span class="label label-success">x-module</span>
+    
+</td>
+                <td></td>
+                <td>108</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <th>Callers (1)</th>
+                <td colspan="5">
+                
+                    <a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/libgcc2.c/__aeabi_d2uiz/">__aeabi_d2uiz (60)</a>
+                    
+                
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    No Callees
+                    
+                </th>
+                <td colspan="5">
+                
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    
+    <pre><a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/libgcc2.c/__aeabi_d2uiz/">__aeabi_d2uiz (60)</a></pre>
+    
+    <pre>
+__aeabi_d2iz():
+ 80022d8:	000a      	movs	r2, r1
+ 80022da:	b530      	push	{r4, r5, lr}
+ 80022dc:	4c13      	ldr	r4, [pc, #76]	; (800232c &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x54&gt;)
+ 80022de:	0053      	lsls	r3, r2, #1
+ 80022e0:	0309      	lsls	r1, r1, #12
+ 80022e2:	0005      	movs	r5, r0
+ 80022e4:	0b09      	lsrs	r1, r1, #12
+ 80022e6:	2000      	movs	r0, #0
+ 80022e8:	0d5b      	lsrs	r3, r3, #21
+ 80022ea:	0fd2      	lsrs	r2, r2, #31
+ 80022ec:	42a3      	cmp	r3, r4
+ 80022ee:	dd04      	ble.n	80022fa &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x22&gt;
+ 80022f0:	480f      	ldr	r0, [pc, #60]	; (8002330 &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x58&gt;)
+ 80022f2:	4283      	cmp	r3, r0
+ 80022f4:	dd02      	ble.n	80022fc &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x24&gt;
+ 80022f6:	4b0f      	ldr	r3, [pc, #60]	; (8002334 &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x5c&gt;)
+ 80022f8:	18d0      	adds	r0, r2, r3
+ 80022fa:	bd30      	pop	{r4, r5, pc}
+ 80022fc:	2080      	movs	r0, #128	; 0x80
+ 80022fe:	0340      	lsls	r0, r0, #13
+ 8002300:	4301      	orrs	r1, r0
+ 8002302:	480d      	ldr	r0, [pc, #52]	; (8002338 &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x60&gt;)
+ 8002304:	1ac0      	subs	r0, r0, r3
+ 8002306:	281f      	cmp	r0, #31
+ 8002308:	dd08      	ble.n	800231c &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x44&gt;
+ 800230a:	480c      	ldr	r0, [pc, #48]	; (800233c &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x64&gt;)
+ 800230c:	1ac3      	subs	r3, r0, r3
+ 800230e:	40d9      	lsrs	r1, r3
+ 8002310:	000b      	movs	r3, r1
+ 8002312:	4258      	negs	r0, r3
+ 8002314:	2a00      	cmp	r2, #0
+ 8002316:	d1f0      	bne.n	80022fa &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x22&gt;
+ 8002318:	0018      	movs	r0, r3
+ 800231a:	e7ee      	b.n	80022fa &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x22&gt;
+ 800231c:	4c08      	ldr	r4, [pc, #32]	; (8002340 &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x68&gt;)
+ 800231e:	40c5      	lsrs	r5, r0
+ 8002320:	46a4      	mov	ip, r4
+ 8002322:	4463      	add	r3, ip
+ 8002324:	4099      	lsls	r1, r3
+ 8002326:	000b      	movs	r3, r1
+ 8002328:	432b      	orrs	r3, r5
+ 800232a:	e7f2      	b.n	8002312 &lt;<a href="/path/build/gcc-arm-none-eabi-Gl9kT9/gcc-arm-none-eabi-9-2019-q4/libgcc/soft-fp/fixdfsi.c/__aeabi_d2iz/">__aeabi_d2iz</a>+0x3a&gt;
+ 800232c:	000003fe 	.word	0x000003fe
+ 8002330:	0000041d 	.word	0x0000041d
+ 8002334:	7fffffff 	.word	0x7fffffff
+ 8002338:	00000433 	.word	0x00000433
+ 800233c:	00000413 	.word	0x00000413
+ 8002340:	fffffbed 	.word	0xfffffbed
+</pre>
+    
+    <pre><a href="/path/%3Cunknown%3E/%3Cunknown%3E/PDM_Init/">PDM_Init (200)</a></pre>
+    
+
+    
+
+
+        </div>
+    <div id="page-footer">
+        <hr>
+        
+            brought to you with &#128150;
+            by <a href="https://twitter.com/hbehrens">Heiko Behrens</a>
+            <span class="secondary">– MIT license, copyright &copy; 2014-2017</span>
+        
+    </div>
+    </div>
+</body>
+</html>
