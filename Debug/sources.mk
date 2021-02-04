@@ -18,9 +18,10 @@ OBJCOPY_BIN :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Core/C-Utils \
-Core/STM32_CAN \
 Core/Src \
 Core/Startup \
+Core/gophercan-lib \
+Core/gophercan-lib/other_files/Setup \
 Drivers/STM32F0xx_HAL_Driver/Src \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
 Middlewares/Third_Party/FreeRTOS/Source \

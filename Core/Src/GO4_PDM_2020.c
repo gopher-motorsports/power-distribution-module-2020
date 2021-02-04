@@ -3,7 +3,7 @@
  *
  *  	Created on: Aug 20, 2020
  *      Author: ian
- *      For use by UMN Gopher Motorsports only.
+ *      For use by UMN Gopher Motorsports only .
  */
 
 //********** System Includes **********/
@@ -355,11 +355,11 @@ void Current_Control_Loop(void) {
         // special device handling code
         if (device->device_name == TEMP) {
             // TODO: use voltage divider conversion
-            TEMP_sensor.data =
+            //TEMP_sensor.data =
         }
         else if (device->device_name == VBAT) {
             // TODO: xuse voltage divider conversion
-            BAT_voltage =
+            //BAT_voltage =
         }
         // Regular overcurrent handling
         else {

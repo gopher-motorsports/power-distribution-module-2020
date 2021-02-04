@@ -1,0 +1,9 @@
+F0_example_main.c:92:5:main	8	static
+F0_example_main.c:173:6:SystemClock_Config	88	static
+F0_example_main.c:208:13:MX_CAN_Init	8	static
+F0_example_main.c:245:13:MX_GPIO_Init	48	static
+F0_example_main.c:283:6:hardware_service	16	static
+F0_example_main.c:303:6:rx_service	16	static
+F0_example_main.c:322:6:background	16	static
+F0_example_main.c:343:6:HAL_TIM_PeriodElapsedCallback	16	static
+F0_example_main.c:360:6:Error_Handler	8	static
